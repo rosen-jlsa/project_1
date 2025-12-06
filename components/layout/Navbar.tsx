@@ -14,12 +14,12 @@ export function Navbar() {
                     <Link href="/" className="hover:text-primary transition-colors">Home</Link>
                     <Link href="#services" className="hover:text-primary transition-colors">Services</Link>
                     <Link href="#specialists" className="hover:text-primary transition-colors">Specialists</Link>
-                    <Link href="/admin" className="hover:text-primary transition-colors">Admin</Link>
+                    <Link href="/reviews" className="hover:text-primary transition-colors">Reviews</Link>
                 </div>
 
                 <Link
-                    href="#book"
-                    className="bg-primary text-primary-foreground px-6 py-2 rounded-full text-sm font-medium hover:bg-primary/90 transition-colors shadow-lg"
+                    href="/#book"
+                    className="bg-white text-black px-6 py-2 rounded-full text-sm font-bold border-2 border-black hover:bg-black hover:text-white transition-all shadow-lg"
                 >
                     Book Now
                 </Link>

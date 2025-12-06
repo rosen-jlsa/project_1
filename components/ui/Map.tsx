@@ -21,10 +21,13 @@ interface MapProps {
     zoom?: number;
 }
 
-const Map = ({ pos, zoom = 13 }: MapProps) => {
+const Map = ({ pos, zoom = 15 }: MapProps) => {
+    // Default to Burgas coordinates if pos is not provided or is default
+    const centerPos: [number, number] = [42.5200, 27.4508];
+
     return (
         <MapContainer
-            center={pos}
+            center={centerPos}
             zoom={zoom}
             scrollWheelZoom={false}
             className="h-[300px] w-full rounded-lg shadow-md z-0"
@@ -33,9 +36,9 @@ const Map = ({ pos, zoom = 13 }: MapProps) => {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <Marker position={pos} icon={icon}>
+            <Marker position={centerPos} icon={icon}>
                 <Popup>
-                    Beauty Salon Location <br /> We are here!
+                    Luxe Salon <br /> g.k. Petko R. Slaveykov, bl. 78 <br /> Burgas, Bulgaria
                 </Popup>
             </Marker>
         </MapContainer>

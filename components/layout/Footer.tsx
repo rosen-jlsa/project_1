@@ -19,15 +19,15 @@ export function Footer() {
                         <div className="space-y-3">
                             <div className="flex items-center gap-3 text-muted-foreground">
                                 <MapPin className="h-5 w-5 text-accent" />
-                                <span>123 Luxury Avenue, Beverly Hills, CA 90210</span>
+                                <span>g.k. Petko R. Slaveykov, zh.k. Slaveykov 78, 8010 Burgas</span>
                             </div>
                             <div className="flex items-center gap-3 text-muted-foreground">
                                 <Phone className="h-5 w-5 text-accent" />
-                                <span>+1 (555) 123-4567</span>
+                                <span>+359897865829</span>
                             </div>
                             <div className="flex items-center gap-3 text-muted-foreground">
                                 <Mail className="h-5 w-5 text-accent" />
-                                <span>contact@luxesalon.com</span>
+                                <span>miglena.todorova75@gmail.com</span>
                             </div>
                         </div>
 
@@ -35,7 +35,7 @@ export function Footer() {
                             <Link href="#" className="p-2 bg-secondary rounded-full text-primary hover:bg-primary hover:text-white transition-colors">
                                 <Instagram className="h-5 w-5" />
                             </Link>
-                            <Link href="#" className="p-2 bg-secondary rounded-full text-primary hover:bg-primary hover:text-white transition-colors">
+                            <Link href="https://www.facebook.com/Megi75f" className="p-2 bg-secondary rounded-full text-primary hover:bg-primary hover:text-white transition-colors">
                                 <Facebook className="h-5 w-5" />
                             </Link>
                             <Link href="#" className="p-2 bg-secondary rounded-full text-primary hover:bg-primary hover:text-white transition-colors">
@@ -47,7 +47,7 @@ export function Footer() {
                     {/* Map Section */}
                     <div className="h-[300px] w-full rounded-xl overflow-hidden shadow-lg border border-gray-100">
                         {/* Coordinates for a generic location, can be updated */}
-                        <MapWrapper pos={[34.0736, -118.4004]} />
+                        <MapWrapper pos={[42.52190, 27.45190]} />
                     </div>
                 </div>
 

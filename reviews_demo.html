@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Reviews & Ratings - Luxe Salon</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #F0FFF0 0%, #ffffff 50%, #F0FFF0 100%);
+            min-height: 100vh;
+            padding: 60px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Header Section */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header-icon {
+            display: inline-block;
+            padding: 15px;
+            background: rgba(95, 74, 139, 0.1);
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        .header-icon svg {
+            width: 50px;
+            height: 50px;
+            color: #5F4A8B;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: #5F4A8B;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #737373;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        /* Average Rating Card */
+        .rating-summary {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            margin-top: 30px;
+        }
+
+        .rating-number {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #5F4A8B;
+            margin-bottom: 10px;
+        }
+
+        .rating-count {
+            color: #737373;
+            margin-top: 10px;
+            font-size: 0.95rem;
+        }
+
+        /* Stars */
+        .stars {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .star {
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .star.interactive:hover {
+            transform: scale(1.15);
+        }
+
+        .star.filled {
+            fill: #FCD34D;
+            color: #FCD34D;
+        }
+
+        .star.empty {
+            fill: #E5E7EB;
+            color: #D1D5DB;
+        }
+
+        /* Review Form */
+        .review-form {
+            background: white;
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+            margin-bottom: 50px;
+            border: 1px solid rgba(95, 74, 139, 0.1);
+        }
+
+        .form-title {
+            font-size: 1.7rem;
+            color: #5F4A8B;
+            margin-bottom: 30px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .rating-input {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FED7AA 100%);
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .rating-value {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #5F4A8B;
+            animation: fadeIn 0.3s;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #E5E7EB;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #5F4A8B;
+            box-shadow: 0 0 0 4px rgba(95, 74, 139, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 140px;
+        }
+
+        .char-count {
+            text-align: right;
+            color: #737373;
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: #ffffff;
+            color: #000000;
+            padding: 18px;
+            border: 4px solid #000000;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            background: #000000;
+            color: #ffffff;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+
+        /* Reviews List */
+        .reviews-section {
+            margin-top: 50px;
+        }
+
+        .section-title {
+            font-size: 1.7rem;
+            color: #5F4A8B;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .review-card {
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+            border: 1px solid rgba(95, 74, 139, 0.05);
+            transition: all 0.3s;
+        }
+
+        .review-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #5F4A8B 0%, #7B4B3A 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .reviewer-details h3 {
+            font-size: 1.1rem;
+            color: #1F2937;
+            margin-bottom: 3px;
+        }
+
+        .review-date {
+            color: #737373;
+            font-size: 0.85rem;
+        }
+
+        .review-stars {
+            display: flex;
+            gap: 3px;
+        }
+
+        .review-stars .star {
+            width: 20px;
+            height: 20px;
+        }
+
+        .review-comment {
+            color: #374151;
+            line-height: 1.7;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        .like-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #000000;
+            background: #ffffff;
+            border: 2px solid #000000;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .like-btn:hover {
+            background: #000000;
+            color: #ffffff;
+        }
+
+        .like-btn svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.2s;
+        }
+
+        .like-btn:hover svg {
+            transform: scale(1.15);
+            /* Make svg white on hover if needed, currentColor handles it */
+        }
+
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon svg {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            color: #737373;
+        }
+
+        .input-icon input {
+            padding-left: 50px;
+        }
+
+        /* Write Review Button */
+        .write-review-btn-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .write-review-btn {
+            background: #ffffff;
+            color: #000000;
+            border: 4px solid #000000;
+            padding: 15px 35px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 12px;
+        }
+
+        .write-review-btn:hover {
+            background: #000000;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .review-form {
+                padding: 30px 25px;
+            }
+
+            .review-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+            </div>
+            <h1>Service Reviews</h1>
+            <p class="subtitle">Share your experience with our beauty services and help others make the best choice</p>
+
+            <!-- Average Rating -->
+            <div class="rating-summary">
+                <div class="rating-number" id="avgRating">4.7</div>
+                <div class="stars">
+                    <svg class="star filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                    </svg>
+                    <svg class="star filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                    </svg>
+                    <svg class="star filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                    </svg>
+                    <svg class="star filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                    </svg>
+                    <svg class="star filled" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                    </svg>
+                </div>
+                <p class="rating-count">Based on <span id="reviewCount">3</span> reviews</p>
+
+                <div class="write-review-btn-container">
+                    <button id="writeReviewBtn" class="write-review-btn">Write a Review</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Review Form -->
+        <div class="review-form">
+            <h2 class="form-title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+                Share Your Experience
+            </h2>
+
+            <form id="reviewForm">
+                <!-- Rating -->
+                <div class="form-group">
+                    <label>Rate Our Service</label>
+                    <div class="rating-input">
+                        <div class="stars" id="ratingStars">
+                            <!-- Stars will be added by JavaScript -->
+                        </div>
+                        <span class="rating-value" id="ratingValue" style="display: none;"></span>
+                    </div>
+                </div>
+
+                <!-- Name -->
+                <div class="form-group">
+                    <label>Your Name</label>
+                    <div class="input-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <input type="text" id="nameInput" placeholder="Enter your name" required>
+                    </div>
+                </div>
+
+                <!-- Comment -->
+                <div class="form-group">
+                    <label>Your Review</label>
+                    <textarea id="commentInput" placeholder="Tell us about your experience with our services..."
+                        required></textarea>
+                    <div class="char-count"><span id="charCount">0</span> characters</div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="submit-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                    Submit Review
+                </button>
+            </form>
+        </div>
+
+        <!-- Reviews List -->
+        <div class="reviews-section">
+            <h2 class="section-title">Customer Reviews (<span id="displayCount">3</span>)</h2>
+            <div id="reviewsList">
+                <!-- Reviews will be added by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initial reviews data
+        let reviews = [
+            {
+                id: 1,
+                name: "Maria Ivanova",
+                rating: 5,
+                comment: "Amazing service! The staff is incredibly professional and the atmosphere is so relaxing. I had a wonderful experience with my haircut and styling.",
+                date: "2025-11-28",
+                likes: 12
+            },
+            {
+                id: 2,
+                name: "Elena Petrova",
+                rating: 5,
+                comment: "Best beauty salon in town! The attention to detail is outstanding. My nails look perfect and the manicure lasted for weeks. Highly recommend!",
+                date: "2025-11-25",
+                likes: 8
+            },
+            {
+                id: 3,
+                name: "Svetlana Georgieva",
+                rating: 4,
+                comment: "Great experience overall. The specialists are very skilled and friendly. Only minor wait time, but it was worth it. Will definitely come back!",
+                date: "2025-11-20",
+                likes: 5
+            }
+        ];
+
+        let currentRating = 0;
+
+        // Create star element
+        function createStar(filled, interactive = false) {
+            const star = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            star.setAttribute("class", `star ${interactive ? 'interactive' : ''} ${filled ? 'filled' : 'empty'}`);
+            star.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+            star.setAttribute("viewBox", "0 0 24 24");
+            star.setAttribute("stroke", "currentColor");
+
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("stroke-linecap", "round");
+            path.setAttribute("stroke-linejoin", "round");
+            path.setAttribute("stroke-width", "2");
+            path.setAttribute("d", "M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z");
+
+            star.appendChild(path);
+            return star;
+        }
+
+        // Initialize rating stars
+        function initRatingStars() {
+            const container = document.getElementById('ratingStars');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= 5; i++) {
+                const star = createStar(i <= currentRating, true);
+                star.addEventListener('click', () => {
+                    currentRating = i;
+                    updateRatingStars();
+                    document.getElementById('ratingValue').textContent = `${i} / 5`;
+                    document.getElementById('ratingValue').style.display = 'block';
+                });
+
+                star.addEventListener('mouseenter', () => {
+                    updateRatingStars(i);
+                });
+
+                container.appendChild(star);
+            }
+
+            container.addEventListener('mouseleave', () => {
+                updateRatingStars();
+            });
+        }
+
+        // Update rating stars
+        function updateRatingStars(hoverRating = null) {
+            const container = document.getElementById('ratingStars');
+            const stars = container.querySelectorAll('.star');
+            const displayRating = hoverRating || currentRating;
+
+            stars.forEach((star, index) => {
+                if (index < displayRating) {
+                    star.classList.remove('empty');
+                    star.classList.add('filled');
+                } else {
+                    star.classList.remove('filled');
+                    star.classList.add('empty');
+                }
+            });
+        }
+
+        // Render reviews
+        function renderReviews() {
+            const container = document.getElementById('reviewsList');
+            container.innerHTML = '';
+
+            reviews.forEach(review => {
+                const reviewCard = document.createElement('div');
+                reviewCard.className = 'review-card';
+
+                reviewCard.innerHTML = `
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="avatar">${review.name.charAt(0)}</div>
+                            <div class="reviewer-details">
+                                <h3>${review.name}</h3>
+                                <p class="review-date">${review.date}</p>
+                            </div>
+                        </div>
+                        <div class="review-stars" id="stars-${review.id}"></div>
+                    </div>
+                    <p class="review-comment">${review.comment}</p>
+                    <button class="like-btn" onclick="handleLike(${review.id})">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+                        </svg>
+                        <span id="likes-${review.id}">${review.likes}</span> helpful
+                    </button>
+                `;
+
+                container.appendChild(reviewCard);
+
+                // Add stars
+                const starsContainer = document.getElementById(`stars-${review.id}`);
+                for (let i = 1; i <= 5; i++) {
+                    starsContainer.appendChild(createStar(i <= review.rating));
+                }
+            });
+
+            updateStats();
+        }
+
+        // Update statistics
+        function updateStats() {
+            const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+            document.getElementById('avgRating').textContent = avgRating.toFixed(1);
+            document.getElementById('reviewCount').textContent = reviews.length;
+            document.getElementById('displayCount').textContent = reviews.length;
+        }
+
+        // Handle like button
+        function handleLike(id) {
+            const review = reviews.find(r => r.id === id);
+            if (review) {
+                review.likes++;
+                document.getElementById(`likes-${id}`).textContent = review.likes;
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('reviewForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            if (currentRating === 0) {
+                alert('Please select a rating');
+                return;
+            }
+
+            const name = document.getElementById('nameInput').value;
+            const comment = document.getElementById('commentInput').value;
+
+            const newReview = {
+                id: reviews.length + 1,
+                name: name,
+                rating: currentRating,
+                comment: comment,
+                date: new Date().toISOString().split('T')[0],
+                likes: 0
+            };
+
+            reviews.unshift(newReview);
+            renderReviews();
+
+            // Reset form
+            document.getElementById('reviewForm').reset();
+            currentRating = 0;
+            document.getElementById('ratingValue').style.display = 'none';
+            initRatingStars();
+            document.getElementById('charCount').textContent = '0';
+        });
+
+        // Character count
+        document.getElementById('commentInput').addEventListener('input', (e) => {
+            document.getElementById('charCount').textContent = e.target.value.length;
+        });
+
+        // Initialize
+        initRatingStars();
+        renderReviews();
+
+        // Scroll to review form
+        document.getElementById('writeReviewBtn').addEventListener('click', () => {
+            document.querySelector('.review-form').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -27,7 +27,7 @@ export function Hero() {
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                     <Link
                         href="#book"
-                        className="group bg-primary text-primary-foreground px-8 py-4 rounded-full text-lg font-medium hover:bg-primary/90 transition-all shadow-xl hover:shadow-2xl flex items-center gap-2"
+                        className="group bg-white text-black px-8 py-4 rounded-full text-lg font-bold border-2 border-black hover:bg-black hover:text-white transition-all shadow-xl hover:shadow-2xl flex items-center gap-2"
                     >
                         Book Appointment
                         <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -35,7 +35,7 @@ export function Hero() {
 
                     <Link
                         href="#services"
-                        className="px-8 py-4 rounded-full text-lg font-medium text-primary hover:bg-primary/5 transition-colors border border-primary/20"
+                        className="px-8 py-4 rounded-full text-lg font-bold text-black border-2 border-black hover:bg-black hover:text-white transition-colors"
                     >
                         View Services
                     </Link>

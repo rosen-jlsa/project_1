@@ -1,31 +1,36 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
-  --background: #F0FFF0; /* Honeydew */
-  --foreground: #1a1a1a;
-  
-  /* Deep Purple */
-  --primary: #5F4A8B;
-  --primary-foreground: #ffffff;
+@layer base {
+  :root {
+    --background: #F0FFF0;
+    /* Honeydew */
+    --foreground: #1a1a1a;
 
-  /* Honeydew (Secondary/Background) */
-  --secondary: #F0FFF0;
-  --secondary-foreground: #5F4A8B;
+    /* Deep Purple */
+    --primary: #5F4A8B;
+    --primary-foreground: #ffffff;
 
-  /* Russet */
-  --accent: #7B4B3A;
-  --accent-foreground: #ffffff;
+    /* Honeydew (Secondary/Background) */
+    --secondary: #F0FFF0;
+    --secondary-foreground: #5F4A8B;
 
-  --muted: #f5f5f5;
-  --muted-foreground: #737373;
+    /* Russet */
+    --accent: #7B4B3A;
+    --accent-foreground: #ffffff;
 
-  --radius: 0.5rem;
+    --muted: #f5f5f5;
+    --muted-foreground: #737373;
+
+    --radius: 0.5rem;
+  }
+
+  body {
+    color: var(--foreground);
+    background: var(--background);
+    font-family: Arial, Helvetica, sans-serif;
+  }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+html {
+  scroll-behavior: smooth;
 }
