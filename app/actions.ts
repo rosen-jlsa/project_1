@@ -9,8 +9,8 @@ export async function adminLogin(formData: FormData) {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
-    const adminEmail = process.env.ADMIN_EMAIL || "admin@example.com";
-    const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
+    const adminEmail = process.env.ADMIN_EMAIL || "miglena.todorova75@gmail.com";
+    const adminPassword = process.env.ADMIN_PASSWORD || "buv6dxiku2";
 
     if (email === adminEmail && password === adminPassword) {
         // Set cookie
@@ -145,7 +145,7 @@ export async function updateBookingStatus(id: string, status: 'approved' | 'reje
 export async function getBookedSlots(date: string) {
     if (!isSupabaseConfigured) {
         // Mock data: 12:00 is always booked on any date
-        return ["12:00"];
+        return [];
     }
 
     const { data, error } = await supabase
