@@ -10,7 +10,8 @@ if (!isSupabaseConfigured) {
 }
 
 // Fallback to dummy values to prevent crash during build/runtime if keys are missing
-export const supabase = createClient(
+// Fallback to dummy values to prevent crash during build/runtime if keys are missing
+export const createSupabaseClient = () => createClient(
     supabaseUrl || 'https://placeholder.supabase.co',
     supabaseAnonKey || 'placeholder'
 )
