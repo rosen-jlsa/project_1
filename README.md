@@ -37,12 +37,8 @@ Required variables for the application to function correctly:
 | :--- | :--- |
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase Project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase Anonymous Key (Client-side safe) |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase Service Role Key (Server-side only, for Admin actions) |
-| `ADMIN_EMAIL` | Email address for the admin user |
-| `ADMIN_PASSWORD` | Password for the admin user |
-| `RESEND_API_KEY` | API Key for Resend (Email service) |
 
-> **Note**: Do NOT commit `.env.local` to version control.
+> **Note**: Additional server-side keys may be required for full admin functionality. Do NOT commit `.env.local` to version control.
 
 ## Project Structure
 

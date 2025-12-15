@@ -23,3 +23,9 @@ export const createAdminClient = () => {
     }
     return createClient(supabaseUrl, serviceRoleKey);
 }
+
+export const getUser = async () => {
+    const supabase = createSupabaseClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    return user;
+}
