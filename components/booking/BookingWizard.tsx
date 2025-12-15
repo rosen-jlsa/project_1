@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { createBooking, getServices, getBookedSlots } from "@/app/actions";
-import { Calendar, Clock, User, CheckCircle, AlertCircle } from "lucide-react";
+import { useState, useEffect, Suspense } from "react";
+import { createBooking, getServices, getBookedSlots, getSpecialists } from "@/app/actions";
+import { Clock, User, CheckCircle, AlertCircle, Calendar as CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useSearchParams } from "next/navigation";
+import { Specialist } from "@/lib/data";
 
 // Types
 type Service = {
@@ -12,6 +14,7 @@ type Service = {
     category: string;
     price: number;
     duration: number;
+    specialistIds?: string[];
 };
 
 const TIME_SLOTS = [
@@ -21,8 +24,20 @@ const TIME_SLOTS = [
 ];
 
 export function BookingWizard() {
+    return (
+        <Suspense fallback={<div className="text-center p-8">Loading booking...</div>}>
+            <BookingWizardContent />
+        </Suspense>
+    );
+}
+
+function BookingWizardContent() {
+    const searchParams = useSearchParams();
+    const specialistId = searchParams.get("specialist");
+
     const [step, setStep] = useState(1);
     const [services, setServices] = useState<Service[]>([]);
+    const [specialist, setSpecialist] = useState<Specialist | null>(null);
     const [loading, setLoading] = useState(true);
 
     // Form State
@@ -43,33 +58,43 @@ export function BookingWizard() {
     const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
 
     useEffect(() => {
-        getServices().then((data) => {
-            setServices(data || []);
+        Promise.all([getServices(), getSpecialists()]).then(([servicesData, specialistsData]) => {
+            setServices(servicesData || []);
+            if (specialistId && specialistsData) {
+                const found = specialistsData.find((s: Specialist) => s.id === specialistId);
+                setSpecialist(found || null);
+            }
             setLoading(false);
         });
-    }, []);
+    }, [specialistId]);
+
+    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newDate = e.target.value;
+        if (!newDate) {
+            setDate("");
+            setBookedSlots([]);
+            return;
+        }
+
+        const day = new Date(newDate).getDay();
+        if (day === 0) {
+            setMessage({ text: "We are closed on Sundays. Please choose another day.", type: 'error' });
+            setDate("");
+            setBookedSlots([]);
+        } else {
+            setMessage(null);
+            setDate(newDate);
+        }
+    };
 
     useEffect(() => {
         if (date) {
-            // Check for Sunday
-            const day = new Date(date).getDay();
-            if (day === 0) {
-                setMessage({ text: "We are closed on Sundays. Please choose another day.", type: 'error' });
-                setDate("");
-                setBookedSlots([]);
-                return;
-            } else {
-                setMessage(null);
-            }
-
-            // Fetch booked slots
-            getBookedSlots(date).then((slots) => {
+            // Fetch booked slots for the specific specialist if selected
+            getBookedSlots(date, specialistId || undefined).then((slots) => {
                 setBookedSlots(slots || []);
             });
-        } else {
-            setBookedSlots([]);
         }
-    }, [date]);
+    }, [date, specialistId]);
 
     const handleNext = () => {
         if (step === 1 && selectedService && date && time) setStep(2);
@@ -105,6 +130,7 @@ export function BookingWizard() {
         setIsSubmitting(true);
         const formData = new FormData();
         if (selectedService) formData.append("serviceId", selectedService.id);
+        if (specialistId) formData.append("specialistId", specialistId);
         formData.append("date", date);
         formData.append("time", time);
         formData.append("firstName", firstName);
@@ -131,11 +157,26 @@ export function BookingWizard() {
     maxDateObj.setMonth(maxDateObj.getMonth() + 1);
     const maxDate = maxDateObj.toISOString().split('T')[0];
 
-    const categories = ["Women", "Men", "Children", "Piercing"];
+    // Dynamic categories based on available services
+    const getCategories = () => {
+        if (specialistId) {
+            // Get categories only available for this specialist
+            const specServices = services.filter(s => s.specialistIds?.includes(specialistId));
+            return Array.from(new Set(specServices.map(s => s.category)));
+        }
+        return ["Women", "Men", "Children", "Face", "Body", "Nails", "Piercing"];
+    }
+    const categories = getCategories();
 
-    const filteredServices = selectedCategory
-        ? services.filter(s => s.category === selectedCategory)
-        : [];
+    const filteredServices = services.filter(s => {
+        // Filter by category if selected
+        if (selectedCategory && s.category !== selectedCategory) return false;
+
+        // Filter by specialist if selected
+        if (specialistId && s.specialistIds && !s.specialistIds.includes(specialistId)) return false;
+
+        return true;
+    });
 
     if (loading) return <div className="text-primary animate-pulse">Loading services...</div>;
 
@@ -170,7 +211,14 @@ export function BookingWizard() {
                         {/* Category & Service Selection */}
                         <div>
                             <h3 className="text-2xl font-serif font-bold text-primary mb-6">
-                                {selectedCategory ? `Select ${selectedCategory} Service` : "Select Service Category"}
+                                {specialist ? (
+                                    <div className="flex items-center gap-3">
+                                        {specialist.image && <img src={specialist.image} alt={specialist.name} className="w-10 h-10 rounded-full object-cover" />}
+                                        <span>Booking with {specialist.name}</span>
+                                    </div>
+                                ) : (
+                                    selectedCategory ? `Select ${selectedCategory} Service` : "Select Service Category"
+                                )}
                             </h3>
 
                             {!selectedCategory ? (
@@ -247,7 +295,7 @@ export function BookingWizard() {
                                             min={minDate}
                                             max={maxDate}
                                             value={date}
-                                            onChange={(e) => setDate(e.target.value)}
+                                            onChange={handleDateChange}
                                             className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
                                         />
                                     </div>

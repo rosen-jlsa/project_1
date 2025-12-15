@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { getBookings, updateBookingStatus, checkAdminSession, logoutAdmin } from "@/app/actions";
 import { Check, X, Clock, Calendar, User, Phone, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -26,24 +26,24 @@ export default function AdminDashboard() {
     const [loading, setLoading] = useState(true);
     const router = useRouter();
 
-    useEffect(() => {
-        checkSession();
-    }, []);
-
-    const checkSession = async () => {
-        const isValid = await checkAdminSession();
-        if (!isValid) {
-            router.push("/admin/login");
-        } else {
-            loadBookings();
-        }
-    };
-
-    const loadBookings = async () => {
+    const loadBookings = useCallback(async () => {
         const data = await getBookings();
         setBookings(data || []);
         setLoading(false);
-    };
+    }, []);
+
+    useEffect(() => {
+        const checkSession = async () => {
+            const isValid = await checkAdminSession();
+            if (!isValid) {
+                router.push("/admin/login");
+            } else {
+                loadBookings();
+            }
+        };
+
+        checkSession();
+    }, [router, loadBookings]);
 
     const handleLogout = async () => {
         await logoutAdmin();
@@ -70,6 +70,12 @@ export default function AdminDashboard() {
                 <div className="flex justify-between items-center mb-8">
                     <h1 className="text-3xl font-serif font-bold text-primary">Admin Dashboard</h1>
                     <div className="flex items-center gap-4">
+                        <a
+                            href="/admin/specialists"
+                            className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-primary/90 transition-colors"
+                        >
+                            Manage Specialists
+                        </a>
                         <div className="bg-white px-4 py-2 rounded-lg shadow-sm text-sm text-muted-foreground">
                             {bookings.filter(b => b.status === 'pending').length} Pending Requests
                         </div>

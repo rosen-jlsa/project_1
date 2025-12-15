@@ -6,12 +6,27 @@ const resend = process.env.RESEND_API_KEY
     ? new Resend(process.env.RESEND_API_KEY)
     : null;
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'miglena.todorova75@gmail.com'; // Default to the one provided in chat history
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL; // Must be set in environment variables
 
-export async function sendAdminApprovalEmail(booking: any, approvalLink: string) {
+interface BookingDetails {
+    client_name: string;
+    services: { name: string } | null;
+    booking_date: string;
+    booking_time: string;
+    client_phone: string;
+    client_email: string;
+    id?: string;
+}
+
+export async function sendAdminApprovalEmail(booking: BookingDetails, approvalLink: string) {
     if (!resend) {
         console.log("Mock Email to Admin (No API Key):", { booking, approvalLink });
         return { success: true, id: 'mock-id' };
+    }
+
+    if (!ADMIN_EMAIL) {
+        console.error("Admin Email not configured.");
+        return { success: false, error: "Server Configuration Error" };
     }
 
     try {
@@ -43,7 +58,7 @@ export async function sendAdminApprovalEmail(booking: any, approvalLink: string)
     }
 }
 
-export async function sendClientConfirmationEmail(booking: any) {
+export async function sendClientConfirmationEmail(booking: BookingDetails) {
     if (!resend) {
         console.log("Mock Email to Client (No API Key):", { booking });
         return { success: true, id: 'mock-id' };

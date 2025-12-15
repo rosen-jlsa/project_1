@@ -1,31 +1,10 @@
-import { Instagram, Twitter, Facebook } from "lucide-react";
-import Image from "next/image";
+import { Instagram, Twitter, Facebook, Phone } from "lucide-react";
+import { getSpecialists } from "@/app/actions";
+import Link from "next/link"; // Import Link for booking navigation
 
-const SPECIALISTS = [
-    {
-        id: 1,
-        name: "Alex Rivera",
-        role: "Master Barber",
-        bio: "Specializing in classic cuts and modern fades with over 10 years of experience.",
-        image: "/specialist-1.jpg" // We'll handle missing images gracefully
-    },
-    {
-        id: 2,
-        name: "Sarah Chen",
-        role: "Senior Stylist",
-        bio: "Expert in color transformations and creative styling for all hair types.",
-        image: "/specialist-2.jpg"
-    },
-    {
-        id: 3,
-        name: "Mike Ross",
-        role: "Style Director",
-        bio: "Award-winning stylist known for precision cutting and celebrity styling.",
-        image: "/specialist-3.jpg"
-    }
-];
+export async function Specialists() {
+    const specialists = await getSpecialists();
 
-export function Specialists() {
     return (
         <section id="specialists" className="py-20 bg-white">
             <div className="container mx-auto px-4">
@@ -37,24 +16,50 @@ export function Specialists() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {SPECIALISTS.map((specialist) => (
+                    {specialists.map((specialist: any) => (
                         <div key={specialist.id} className="group relative overflow-hidden rounded-2xl">
                             {/* Placeholder for Image if not exists, or we can use a div with color */}
                             <div className="aspect-[3/4] bg-secondary/50 relative overflow-hidden">
-                                <div className="absolute inset-0 flex items-center justify-center text-primary/20 font-serif text-9xl font-bold select-none">
-                                    {specialist.name.charAt(0)}
-                                </div>
+                                {specialist.image ? (
+                                    <img
+                                        src={specialist.image}
+                                        alt={specialist.name}
+                                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                    />
+                                ) : (
+                                    <div className="absolute inset-0 flex items-center justify-center text-primary/20 font-serif text-9xl font-bold select-none">
+                                        {specialist.name.charAt(0)}
+                                    </div>
+                                )}
+
                                 {/* Overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
                                     <h3 className="text-xl font-bold">{specialist.name}</h3>
                                     <p className="text-sm text-white/80 mb-4">{specialist.role}</p>
-                                    <p className="text-sm text-white/70 mb-4 opacity-0 group-hover:opacity-100 transition-opacity delay-100 duration-300 transform translate-y-4 group-hover:translate-y-0">
+                                    <p className="text-sm text-white/70 mb-4 opacity-0 group-hover:opacity-100 transition-opacity delay-100 duration-300 transform translate-y-4 group-hover:translate-y-0 line-clamp-3">
                                         {specialist.bio}
                                     </p>
-                                    <div className="flex gap-4 opacity-0 group-hover:opacity-100 transition-opacity delay-200 duration-300 transform translate-y-4 group-hover:translate-y-0">
-                                        <button className="hover:text-primary-foreground transition-colors"><Instagram className="w-5 h-5" /></button>
-                                        <button className="hover:text-primary-foreground transition-colors"><Twitter className="w-5 h-5" /></button>
-                                        <button className="hover:text-primary-foreground transition-colors"><Facebook className="w-5 h-5" /></button>
+
+                                    <div className="space-y-3 opacity-0 group-hover:opacity-100 transition-opacity delay-200 duration-300 transform translate-y-4 group-hover:translate-y-0">
+                                        {specialist.phone && (
+                                            <div className="flex items-center gap-2 text-sm text-white/90">
+                                                <Phone className="w-4 h-4" />
+                                                <span>{specialist.phone}</span>
+                                            </div>
+                                        )}
+
+                                        <div className="flex gap-4 pt-2">
+                                            {specialist.instagram && <a href={`https://instagram.com/${specialist.instagram}`} target="_blank" rel="noreferrer" className="hover:text-primary-foreground transition-colors"><Instagram className="w-5 h-5" /></a>}
+                                            {specialist.twitter && <a href={`https://twitter.com/${specialist.twitter}`} target="_blank" rel="noreferrer" className="hover:text-primary-foreground transition-colors"><Twitter className="w-5 h-5" /></a>}
+                                            {specialist.facebook && <a href={`https://facebook.com/${specialist.facebook}`} target="_blank" rel="noreferrer" className="hover:text-primary-foreground transition-colors"><Facebook className="w-5 h-5" /></a>}
+                                        </div>
+
+                                        <Link
+                                            href={`/?specialist=${specialist.id}#book`}
+                                            className="block w-full text-center bg-white text-black py-2 rounded-lg font-bold hover:bg-primary hover:text-white transition-colors mt-4"
+                                        >
+                                            Book Appointment
+                                        </Link>
                                     </div>
                                 </div>
                             </div>
@@ -63,6 +68,12 @@ export function Specialists() {
                             <div className="mt-4 text-center md:hidden">
                                 <h3 className="text-xl font-bold text-primary">{specialist.name}</h3>
                                 <p className="text-sm text-muted-foreground">{specialist.role}</p>
+                                <Link
+                                    href={`/?specialist=${specialist.id}#book`}
+                                    className="inline-block mt-2 text-primary font-medium hover:underline"
+                                >
+                                    Book Now
+                                </Link>
                             </div>
                         </div>
                     ))}

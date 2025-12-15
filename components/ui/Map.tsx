@@ -3,7 +3,7 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { useEffect } from "react";
+
 
 // Fix for default marker icon missing in Leaflet + Next.js
 const icon = L.icon({
@@ -23,7 +23,7 @@ interface MapProps {
 
 const Map = ({ pos, zoom = 15 }: MapProps) => {
     // Default to Burgas coordinates if pos is not provided or is default
-    const centerPos: [number, number] = [42.5200, 27.4508];
+    const centerPos: [number, number] = pos;
 
     return (
         <MapContainer

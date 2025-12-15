@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { getReviews, submitReview } from "@/app/actions";
-import { Star, User, MessageSquare, Send } from "lucide-react";
+import { Star, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type Review = {
@@ -13,6 +13,17 @@ type Review = {
     date: string;
 };
 
+interface RawReview {
+    id: string;
+    client_name?: string;
+    name?: string;
+    rating: number;
+    comment: string;
+    created_at?: string;
+    date?: string;
+    [key: string]: unknown;
+}
+
 export function Reviews() {
     const [reviews, setReviews] = useState<Review[]>([]);
     const [isWriting, setIsWriting] = useState(false);
@@ -20,23 +31,23 @@ export function Reviews() {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
 
-    useEffect(() => {
-        loadReviews();
-    }, []);
-
-    const loadReviews = async () => {
-        const data = await getReviews();
-        // Map data to match Review type if needed (e.g. if Supabase returns different field names)
-        // For now assuming mock data matches or Supabase uses client_name/rating/comment
-        const formattedData = data.map((r: any) => ({
+    const mapReviewData = (data: RawReview[]) => {
+        return data.map((r) => ({
             id: r.id,
-            name: r.client_name || r.name,
+            name: r.client_name || r.name || "Anonymous",
             rating: r.rating,
             comment: r.comment,
-            date: r.created_at ? new Date(r.created_at).toLocaleDateString() : r.date
+            date: r.created_at ? new Date(r.created_at).toLocaleDateString() : r.date || new Date().toLocaleDateString()
         }));
-        setReviews(formattedData);
     };
+
+    useEffect(() => {
+        const fetchReviews = async () => {
+            const data = await getReviews();
+            setReviews(mapReviewData(data));
+        };
+        fetchReviews();
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -49,7 +60,10 @@ export function Reviews() {
         if (result.success) {
             setMessage("Thank you for your review!");
             setIsWriting(false);
-            loadReviews(); // Reload reviews
+            setIsWriting(false);
+            // Reload reviews
+            const data = await getReviews();
+            setReviews(mapReviewData(data));
             (e.target as HTMLFormElement).reset();
         } else {
             setMessage(result.message || "Failed to submit review.");
@@ -78,7 +92,7 @@ export function Reviews() {
                                 </div>
                                 <span className="text-sm text-muted-foreground ml-auto">{review.date}</span>
                             </div>
-                            <p className="text-gray-600 mb-6 italic">"{review.comment}"</p>
+                            <p className="text-gray-600 mb-6 italic">&quot;{review.comment}&quot;</p>
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
                                     {review.name.charAt(0)}

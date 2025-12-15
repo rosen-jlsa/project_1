@@ -1,0 +1,25 @@
+[
+  {
+    "id": "cf77be36-581b-4da6-891e-f13761db733f",
+    "serviceId": "10",
+    "specialistId": "3",
+    "date": "2025-12-29",
+    "time": "14:30",
+    "clientName": "adsasd asda",
+    "clientEmail": "asdasdasda@gmail.com",
+    "clientPhone": "0894360675",
+    "status": "pending",
+    "createdAt": "2025-12-13T16:29:05.629Z"
+  },
+  {
+    "id": "02fb4a8f-9e7a-4a8f-bf34-2bf7028f39c6",
+    "serviceId": "1",
+    "date": "2024-01-01",
+    "time": "10:00",
+    "clientName": "Test User",
+    "clientEmail": "test@example.com",
+    "clientPhone": "1234567890",
+    "status": "pending",
+    "createdAt": "2025-12-15T12:18:48.982Z"
+  }
+]

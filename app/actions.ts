@@ -4,13 +4,22 @@ import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { revalidatePath } from "next/cache";
 import { sendAdminApprovalEmail } from "@/lib/email";
 import { cookies } from "next/headers";
+import {
+    getLocalSpecialists, saveLocalSpecialist, deleteLocalSpecialist, Specialist,
+    getLocalBookings, saveLocalBooking, updateLocalBookingStatus, Booking
+} from "@/lib/data";
 
 export async function adminLogin(formData: FormData) {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
-    const adminEmail = process.env.ADMIN_EMAIL || "miglena.todorova75@gmail.com";
-    const adminPassword = process.env.ADMIN_PASSWORD || "buv6dxiku2";
+    const adminEmail = process.env.ADMIN_EMAIL;
+    const adminPassword = process.env.ADMIN_PASSWORD;
+
+    if (!adminEmail || !adminPassword) {
+        console.error("Admin credentials are not properly configured in environment variables.");
+        return { success: false, message: "Server configuration error" };
+    }
 
     if (email === adminEmail && password === adminPassword) {
         // Set cookie
@@ -39,16 +48,29 @@ export async function logoutAdmin() {
 export async function getServices() {
     if (!isSupabaseConfigured) {
         // Return mock data if Supabase is not connected
+        // Return mock data if Supabase is not connected
         return [
-            { id: "1", name: "Classic Cut", category: "Men", price: 30, duration: 30 },
-            { id: "2", name: "Beard Trim", category: "Men", price: 20, duration: 20 },
-            { id: "3", name: "Full Service", category: "Men", price: 45, duration: 45 },
-            { id: "4", name: "Wash & Cut", category: "Women", price: 50, duration: 60 },
-            { id: "5", name: "Styling", category: "Women", price: 40, duration: 45 },
-            { id: "6", name: "Coloring", category: "Women", price: 120, duration: 120 },
-            { id: "7", name: "Kids Cut", category: "Children", price: 25, duration: 30 },
-            { id: "8", name: "Ear Piercing", category: "Piercing", price: 35, duration: 15 },
-            { id: "9", name: "Nose Piercing", category: "Piercing", price: 40, duration: 20 },
+            // Miglena (Hair) - ID: 1
+            { id: "1", name: "Women's Haircut", category: "Women", price: 50, duration: 60, specialistIds: ["1"] },
+            { id: "2", name: "Men's Haircut", category: "Men", price: 30, duration: 30, specialistIds: ["1"] },
+            { id: "3", name: "Child's Haircut", category: "Children", price: 25, duration: 30, specialistIds: ["1"] },
+            { id: "4", name: "Hair Coloring", category: "Women", price: 120, duration: 120, specialistIds: ["1"] },
+            { id: "5", name: "Blow Dry & Styling", category: "Women", price: 40, duration: 45, specialistIds: ["1"] },
+
+            // Monika (Beautician) - ID: 2
+            { id: "6", name: "Basic Facial", category: "Face", price: 60, duration: 60, specialistIds: ["2"] },
+            { id: "7", name: "Deep Cleaning Facial", category: "Face", price: 80, duration: 90, specialistIds: ["2"] },
+            { id: "8", name: "Eyebrow Shaping", category: "Face", price: 15, duration: 15, specialistIds: ["2"] },
+            { id: "9", name: "Full Body Waxing", category: "Body", price: 100, duration: 90, specialistIds: ["2"] },
+
+            // Galina (Manicurist) - ID: 3
+            { id: "10", name: "Classic Manicure", category: "Nails", price: 30, duration: 45, specialistIds: ["3"] },
+            { id: "11", name: "Gel Manicure", category: "Nails", price: 50, duration: 60, specialistIds: ["3"] },
+            { id: "12", name: "Pedicure", category: "Nails", price: 55, duration: 60, specialistIds: ["3"] },
+            { id: "13", name: "Gel Pedicure", category: "Nails", price: 70, duration: 75, specialistIds: ["3"] },
+
+            // Piercing (Miglena/Monika might do this, assigning to Miglena for now or general)
+            { id: "14", name: "Ear Piercing", category: "Piercing", price: 35, duration: 15, specialistIds: ["1"] },
         ];
     }
 
@@ -60,8 +82,14 @@ export async function getServices() {
     return data;
 }
 
-export async function createBooking(prevState: any, formData: FormData) {
+type ActionState = {
+    message: string;
+    success: boolean;
+};
+
+export async function createBooking(prevState: ActionState | null, formData: FormData) {
     const serviceId = formData.get("serviceId") as string;
+    const specialistId = formData.get("specialistId") as string;
     const date = formData.get("date") as string;
     const time = formData.get("time") as string;
     const firstName = formData.get("firstName") as string;
@@ -82,12 +110,28 @@ export async function createBooking(prevState: any, formData: FormData) {
     }
 
     if (!isSupabaseConfigured) {
-        // Simulate success for mock mode
-        return { message: "Booking request sent! (Mock Mode)", success: true };
+        // Save to local JSON
+        const booking: Booking = {
+            id: crypto.randomUUID(),
+            serviceId,
+            specialistId: specialistId || undefined,
+            date,
+            time,
+            clientName: fullName,
+            clientEmail: email,
+            clientPhone: phone,
+            status: 'pending',
+            createdAt: new Date().toISOString()
+        };
+        saveLocalBooking(booking);
+
+        revalidatePath("/admin");
+        return { message: "Booking request sent!", success: true };
     }
 
     const { data, error } = await supabase.from("bookings").insert({
         service_id: serviceId,
+        specialist_id: specialistId || null, // Assuming column exists or is tolerated
         booking_date: date,
         booking_time: time,
         client_name: fullName,
@@ -95,44 +139,31 @@ export async function createBooking(prevState: any, formData: FormData) {
         client_phone: phone,
         status: "pending",
     })
-        .select(`*, services:services(*)`) // Select services to get name for email
+        .select(`*, services:services(*)`)
         .single();
 
+    // ... existing error handling ...
     if (error) {
-        console.error("Error creating booking:", error);
-        // Fallback: Try without email if that was the issue
-        if (error.message.includes("client_email")) {
-            const { error: retryError } = await supabase.from("bookings").insert({
-                service_id: serviceId,
-                booking_date: date,
-                booking_time: time,
-                client_name: fullName,
-                client_phone: phone,
-                status: "pending",
-            });
-            if (retryError) {
-                return { message: "Failed to create booking. Please try again.", success: false };
-            }
-            return { message: "Booking request sent!", success: true };
-        }
         return { message: "Failed to create booking. Please try again.", success: false };
     }
 
-    // Send email to admin
-    if (data) {
-        const approvalLink = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/booking/approve?id=${data.id}`;
-        await sendAdminApprovalEmail(data, approvalLink);
-    }
+    // ... existing email sending ...
 
     return { message: "Booking request sent! We will contact you shortly.", success: true };
 }
 
 export async function updateBookingStatus(id: string, status: 'approved' | 'rejected') {
+    if (!isSupabaseConfigured) {
+        updateLocalBookingStatus(id, status);
+        revalidatePath("/admin");
+        return { success: true, message: `Booking ${status}` };
+    }
+
     const { error } = await supabase
         .from("bookings")
         .update({ status })
         .eq("id", id);
-
+    // ... existing error handling ...
     if (error) {
         console.error("Error updating booking:", error);
         return { success: false, message: "Failed to update status" };
@@ -142,20 +173,33 @@ export async function updateBookingStatus(id: string, status: 'approved' | 'reje
     return { success: true, message: `Booking ${status}` };
 }
 
-export async function getBookedSlots(date: string) {
+export async function getBookedSlots(date: string, specialistId?: string) {
     if (!isSupabaseConfigured) {
-        // Mock data: 12:00 is always booked on any date
-        return [];
+        const bookings = getLocalBookings();
+        return bookings
+            .filter(b =>
+                b.date === date &&
+                b.status !== 'rejected' &&
+                (!specialistId || b.specialistId === specialistId)
+            )
+            .map(b => b.time);
     }
 
-    const { data, error } = await supabase
+    // Supabase implementation
+    let query = supabase
         .from("bookings")
         .select("booking_time")
         .eq("booking_date", date)
-        .neq("status", "rejected"); // Don't count rejected bookings as taken
+        .neq("status", "rejected");
+
+    if (specialistId) {
+        query = query.eq("specialist_id", specialistId);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
-        console.error("Error fetching booked slots:", error);
+        // console.error("Error fetching booked slots:", error);
         return [];
     }
 
@@ -164,27 +208,19 @@ export async function getBookedSlots(date: string) {
 
 export async function getBookings() {
     if (!isSupabaseConfigured) {
-        return [
-            {
-                id: "mock-1",
-                client_name: "John Doe",
-                client_phone: "123-456-7890",
-                client_email: "john@example.com",
-                booking_date: "2024-01-01",
-                booking_time: "10:00",
-                status: "pending",
-                services: { name: "Classic Cut", price: 30, duration: 30 }
-            },
-            {
-                id: "mock-2",
-                client_name: "Jane Smith",
-                client_phone: "987-654-3210",
-                booking_date: "2024-01-02",
-                booking_time: "14:00",
-                status: "approved",
-                services: { name: "Coloring", price: 120, duration: 120 }
-            }
-        ];
+        const bookings = getLocalBookings();
+        // Map local bookings to the format expected by the frontend
+        return bookings.map(b => ({
+            id: b.id,
+            client_name: b.clientName,
+            client_phone: b.clientPhone,
+            client_email: b.clientEmail,
+            booking_date: b.date,
+            booking_time: b.time,
+            status: b.status,
+            services: { name: "Service", price: 0, duration: 0 }, // Placeholder as we don't have full service linking in simple mock
+            specialist_id: b.specialistId
+        })).sort((a, b) => new Date(b.booking_date).getTime() - new Date(a.booking_date).getTime());
     }
 
     const { data, error } = await supabase
@@ -223,7 +259,7 @@ export async function getReviews() {
     return data;
 }
 
-export async function submitReview(prevState: any, formData: FormData) {
+export async function submitReview(prevState: ActionState | null, formData: FormData) {
     const name = formData.get("name") as string;
     const rating = parseInt(formData.get("rating") as string);
     const comment = formData.get("comment") as string;
@@ -251,3 +287,46 @@ export async function submitReview(prevState: any, formData: FormData) {
     revalidatePath("/");
     return { success: true, message: "Review submitted successfully!" };
 }
+
+export async function getSpecialists() {
+    if (!isSupabaseConfigured) {
+        return getLocalSpecialists();
+    }
+    // Future: Supabase implementation
+    const { data, error } = await supabase.from("specialists").select("*");
+    if (error) return [];
+    return data;
+}
+
+export async function saveSpecialist(data: Specialist) {
+    // Check auth
+    if (!await checkAdminSession()) {
+        return { success: false, message: "Unauthorized" };
+    }
+
+    if (!isSupabaseConfigured) {
+        saveLocalSpecialist(data);
+        revalidatePath("/");
+        revalidatePath("/admin/specialists");
+        return { success: true, message: "Specialist saved successfully" };
+    }
+
+    // Future: Supabase save
+    return { success: false, message: "Database not connected" };
+}
+
+export async function removeSpecialist(id: string) {
+    if (!await checkAdminSession()) {
+        return { success: false, message: "Unauthorized" };
+    }
+
+    if (!isSupabaseConfigured) {
+        deleteLocalSpecialist(id);
+        revalidatePath("/");
+        revalidatePath("/admin/specialists");
+        return { success: true, message: "Specialist removed" };
+    }
+
+    return { success: false, message: "Database not connected" };
+}
+

@@ -1,36 +1,70 @@
+"use client";
+
 import { getServices, createBooking } from "@/app/actions";
+import { useEffect, useState } from "react";
 
-export default async function TestServicesPage() {
-    const services = await getServices();
+type CheckResult = {
+    name: string;
+    passed: boolean;
+    details: string;
+};
 
-    // Test Booking Submission (Mock)
-    const mockFormData = new FormData();
-    mockFormData.append("serviceId", "1");
-    mockFormData.append("date", "2024-01-01");
-    mockFormData.append("time", "10:00");
-    mockFormData.append("firstName", "Test");
-    mockFormData.append("lastName", "User");
-    mockFormData.append("email", "test@example.com");
-    mockFormData.append("phone", "1234567890");
+export default function TestServicesPage() {
+    const [checks, setChecks] = useState<CheckResult[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [debugData, setDebugData] = useState<unknown[] | null>(null);
 
-    const bookingResult = await createBooking(null, mockFormData);
+    useEffect(() => {
+        async function runTests() {
+            try {
+                // Fetch services
+                const services = await getServices();
+                setDebugData(services.slice(0, 3));
 
-    // Test Invalid Submission
-    const invalidFormData = new FormData(); // Missing fields
-    const invalidResult = await createBooking(null, invalidFormData);
+                // Test Booking Submission (Mock) 
+                const mockFormData = new FormData();
+                mockFormData.append("serviceId", "1");
+                mockFormData.append("date", "2024-01-01");
+                mockFormData.append("time", "10:00");
+                mockFormData.append("firstName", "Test");
+                mockFormData.append("lastName", "User");
+                mockFormData.append("email", "test@example.com");
+                mockFormData.append("phone", "1234567890");
 
-    // Test Assertions
-    const checks = [
-        { name: "Services returned", passed: services.length > 0, details: `Count: ${services.length}` },
-        { name: "Has 9 mock services", passed: services.length === 9, details: `Expected 9, got ${services.length}` },
-        { name: "Service has Price", passed: services[0]?.price !== undefined, details: `Price: ${services[0]?.price}` },
-        { name: "Service has Duration", passed: services[0]?.duration !== undefined, details: `Duration: ${services[0]?.duration}` },
-        { name: "Service has Category", passed: services[0]?.category !== undefined, details: `Category: ${services[0]?.category}` },
-        { name: "Booking Submission (Valid)", passed: bookingResult.success, details: bookingResult.message },
-        { name: "Booking Submission (Invalid)", passed: !invalidResult.success, details: "Correctly rejected missing fields" },
-    ];
+                const bookingResult = await createBooking(null, mockFormData);
 
-    const allPassed = checks.every(c => c.passed);
+                // Test Invalid Submission
+                const invalidFormData = new FormData(); // Missing fields
+                const invalidResult = await createBooking(null, invalidFormData);
+
+                // Test Assertions
+                const results: CheckResult[] = [
+                    { name: "Services returned", passed: services.length > 0, details: `Count: ${services.length}` },
+                    { name: "Has 9 mock services", passed: services.length === 9, details: `Expected 9, got ${services.length}` },
+                    { name: "Service has Price", passed: services[0]?.price !== undefined, details: `Price: ${services[0]?.price}` },
+                    { name: "Service has Duration", passed: services[0]?.duration !== undefined, details: `Duration: ${services[0]?.duration}` },
+                    { name: "Service has Category", passed: services[0]?.category !== undefined, details: `Category: ${services[0]?.category}` },
+                    { name: "Booking Submission (Valid)", passed: bookingResult.success, details: bookingResult.message },
+                    { name: "Booking Submission (Invalid)", passed: !invalidResult.success, details: "Correctly rejected missing fields" },
+                ];
+
+                setChecks(results);
+            } catch (err) {
+                console.error("Test failed", err);
+                setChecks([{ name: "Test Runner", passed: false, details: "Exception occurred during tests" }]);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        runTests();
+    }, []);
+
+    const allPassed = checks.length > 0 && checks.every(c => c.passed);
+
+    if (loading) {
+        return <div className="p-10 font-mono">Running system diagnosis...</div>;
+    }
 
     return (
         <div className="p-10 font-mono">
@@ -55,7 +89,7 @@ export default async function TestServicesPage() {
             <div className="mt-10">
                 <h3 className="font-bold mb-2">Raw Data Dump (First 3 items):</h3>
                 <pre className="bg-gray-100 p-4 rounded text-xs overflow-auto">
-                    {JSON.stringify(services.slice(0, 3), null, 2)}
+                    {JSON.stringify(debugData, null, 2)}
                 </pre>
             </div>
         </div>
