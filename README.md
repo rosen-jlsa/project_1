@@ -1,72 +1,52 @@
-# Luxe Salon Booking Platform
+# Salon Booking App
 
-A modern booking platform for a beauty salon, built with Next.js 16, TypeScript, and Tailwind CSS.
+A simple, efficient booking management system for salon services.
 
-## Technology Stack
+## Application Purpose
 
-- **Framework**: Next.js 16 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS (v4)
-- **Database & Auth**: Supabase
-- **Email**: Resend
-- **Icons**: Lucide React
+This application allows clients to view services/specialists and book appointments. It includes an admin interface for managing specialists and approving bookings.
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ installed.
+- Node.js 18+
 
-### Installation
+### Setup & Run
 
-1. Clone the repository.
-2. Install dependencies:
+1. Clone the repo and install dependencies:
    ```bash
    npm install
    ```
+2. Create `.env.local` (see variable list below).
+3. Run locally:
+   ```bash
+   npm run dev
+   ```
+4. Build for production:
+   ```bash
+   npm run build
+   npm run start
+   ```
 
-### Environment Configuration
+### Environment Variables
 
-Create a `.env.local` file in the root directory. You must configure the following variables:
+Required variables for the application to function correctly:
 
-```bash
-# Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+| Variable | Description |
+| :--- | :--- |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase Project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase Anonymous Key (Client-side safe) |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase Service Role Key (Server-side only, for Admin actions) |
+| `ADMIN_EMAIL` | Email address for the admin user |
+| `ADMIN_PASSWORD` | Password for the admin user |
+| `RESEND_API_KEY` | API Key for Resend (Email service) |
 
-# Admin Authentication
-ADMIN_EMAIL=admin@example.com
-ADMIN_PASSWORD=your_secure_password
-
-# Email Service (Resend)
-RESEND_API_KEY=re_123456789
-```
-
-> **Note**: If Supabase variables are missing, the application will run in "Mock Mode" with limited functionality.
-
-### Running Locally
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) to view the application.
-
-### Building for Production
-
-```bash
-npm run build
-npm run start
-```
+> **Note**: Do NOT commit `.env.local` to version control.
 
 ## Project Structure
 
-- `/app`: App Router pages and API routes.
-- `/components`: Reusable UI components.
-- `/lib`: Utilities, database clients, and helper functions.
-- `/public`: Static assets.
-
-## Deployment
-
-Ready to deploy on [Vercel](https://vercel.com) or any Next.js compatible hosting. Ensure all environment variables are set in the deployment dashboard.
+- `app/`: Next.js App Router pages and API endpoints.
+- `components/`: UI components.
+- `lib/`: Shared utilities (Supabase client, email sender).
+- `public/`: Static files.

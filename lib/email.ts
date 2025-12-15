@@ -20,7 +20,6 @@ interface BookingDetails {
 
 export async function sendAdminApprovalEmail(booking: BookingDetails, approvalLink: string) {
     if (!resend) {
-        console.log("Mock Email to Admin (No API Key):", { booking, approvalLink });
         return { success: true, id: 'mock-id' };
     }
 
@@ -60,7 +59,6 @@ export async function sendAdminApprovalEmail(booking: BookingDetails, approvalLi
 
 export async function sendClientConfirmationEmail(booking: BookingDetails) {
     if (!resend) {
-        console.log("Mock Email to Client (No API Key):", { booking });
         return { success: true, id: 'mock-id' };
     }
 

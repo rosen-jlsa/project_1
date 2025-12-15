@@ -14,3 +14,11 @@ export const supabase = createClient(
     supabaseUrl || 'https://placeholder.supabase.co',
     supabaseAnonKey || 'placeholder'
 )
+
+export const createAdminClient = () => {
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!supabaseUrl || !serviceRoleKey) {
+        throw new Error("Supabase URL and Service Role Key are required for Admin operations.");
+    }
+    return createClient(supabaseUrl, serviceRoleKey);
+}

@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createAdminClient } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 import { sendClientConfirmationEmail } from '@/lib/email';
 
@@ -21,10 +21,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.redirect(new URL('/booking/confirmed?mock=true', request.url));
     }
 
-    const supabaseAdmin = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL,
-        process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
+    const supabaseAdmin = createAdminClient();
 
     // 1. Update booking status
     const { data: booking, error: updateError } = await supabaseAdmin
