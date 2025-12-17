@@ -5,6 +5,7 @@ import { Specialist } from "@/lib/data";
 import { Plus, Trash2, Edit, Phone, Instagram, Twitter, Facebook, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { SpecialistForm } from "./specialist-form";
+import Image from "next/image";
 
 export default function ManageSpecialists() {
     const [specialists, setSpecialists] = useState<Specialist[]>([]);
@@ -12,20 +13,27 @@ export default function ManageSpecialists() {
     const [editingSpecialist, setEditingSpecialist] = useState<Specialist | null>(null);
     const [showForm, setShowForm] = useState(false);
 
-    const loadSpecialists = async () => {
-        const data = await getSpecialists();
-        setSpecialists(data || []);
-        setLoading(false);
-    };
+
 
     useEffect(() => {
-        loadSpecialists();
+        let mounted = true;
+        const load = async () => {
+            const data = await getSpecialists();
+            if (mounted) {
+                setSpecialists(data || []);
+                setLoading(false);
+            }
+        };
+        load();
+        return () => { mounted = false; };
     }, []);
 
     const handleDelete = async (id: string) => {
         if (confirm("Are you sure you want to delete this specialist?")) {
             await removeSpecialist(id);
-            loadSpecialists();
+            // Refresh list
+            const data = await getSpecialists();
+            setSpecialists(data || []);
         }
     };
 
@@ -34,13 +42,15 @@ export default function ManageSpecialists() {
         setShowForm(true);
     };
 
-    const handleFormClose = () => {
+    const handleFormClose = async () => {
         setEditingSpecialist(null);
         setShowForm(false);
-        loadSpecialists();
+        // Refresh
+        const data = await getSpecialists();
+        setSpecialists(data || []);
     };
 
-    if (loading) return <div className="p-8 text-center">Loading...</div>;
+    if (loading) return <div className="p-8 text-center text-primary">Loading...</div>;
 
     if (showForm) {
         return (
@@ -78,9 +88,15 @@ export default function ManageSpecialists() {
                 {specialists.map((specialist) => (
                     <div key={specialist.id} className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col">
                         <div className="flex items-start gap-4 mb-4">
-                            <div className="w-16 h-16 bg-gray-100 rounded-full overflow-hidden flex-shrink-0">
+                            <div className="w-16 h-16 bg-gray-100 rounded-full overflow-hidden flex-shrink-0 relative">
                                 {specialist.image ? (
-                                    <img src={specialist.image} alt={specialist.name} className="w-full h-full object-cover" />
+                                    <Image
+                                        src={specialist.image}
+                                        alt={specialist.name}
+                                        fill
+                                        className="object-cover"
+                                        sizes="(max-width: 768px) 100vw, 100px"
+                                    />
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center text-gray-400 font-bold text-xl">
                                         {specialist.name.charAt(0)}

@@ -1,8 +1,7 @@
 "use server";
 
-import { createSupabaseClient, isSupabaseConfigured } from "@/lib/supabase";
+import { createSessionClient, isSupabaseConfigured } from "@/lib/supabase";
 import { revalidatePath } from "next/cache";
-import { sendAdminApprovalEmail } from "@/lib/email";
 import { cookies } from "next/headers";
 import {
     getLocalSpecialists, saveLocalSpecialist, deleteLocalSpecialist, Specialist,
@@ -74,7 +73,7 @@ export async function getServices() {
         ];
     }
 
-    const supabase = createSupabaseClient();
+    const supabase = await createSessionClient();
     const { data, error } = await supabase.from("services").select("*");
     if (error) {
         console.error("Error fetching services:", error);
@@ -130,8 +129,8 @@ export async function createBooking(prevState: ActionState | null, formData: For
         return { message: "Booking request sent!", success: true };
     }
 
-    const supabase = createSupabaseClient();
-    const { data, error } = await supabase.from("bookings").insert({
+    const supabase = await createSessionClient();
+    const { error } = await supabase.from("bookings").insert({
         service_id: serviceId,
         specialist_id: specialistId || null, // Assuming column exists or is tolerated
         booking_date: date,
@@ -161,7 +160,7 @@ export async function updateBookingStatus(id: string, status: 'approved' | 'reje
         return { success: true, message: `Booking ${status}` };
     }
 
-    const supabase = createSupabaseClient();
+    const supabase = await createSessionClient();
     const { error } = await supabase
         .from("bookings")
         .update({ status })
@@ -189,7 +188,7 @@ export async function getBookedSlots(date: string, specialistId?: string) {
     }
 
     // Supabase implementation
-    const supabase = createSupabaseClient();
+    const supabase = await createSessionClient();
     let query = supabase
         .from("bookings")
         .select("booking_time")
@@ -227,7 +226,7 @@ export async function getBookings() {
         })).sort((a, b) => new Date(b.booking_date).getTime() - new Date(a.booking_date).getTime());
     }
 
-    const supabase = createSupabaseClient();
+    const supabase = await createSessionClient();
     const { data, error } = await supabase
         .from("bookings")
         .select(`
@@ -252,7 +251,7 @@ export async function getReviews() {
         ];
     }
 
-    const supabase = createSupabaseClient();
+    const supabase = await createSessionClient();
     const { data, error } = await supabase
         .from("reviews")
         .select("*")
@@ -278,7 +277,7 @@ export async function submitReview(prevState: ActionState | null, formData: Form
         return { success: true, message: "Review submitted successfully! (Mock Mode)" };
     }
 
-    const supabase = createSupabaseClient();
+    const supabase = await createSessionClient();
     const { error } = await supabase.from("reviews").insert({
         client_name: name,
         rating: rating,
@@ -300,7 +299,7 @@ export async function getSpecialists() {
         return getLocalSpecialists();
     }
     // Future: Supabase implementation
-    const supabase = createSupabaseClient();
+    const supabase = await createSessionClient();
     const { data, error } = await supabase.from("specialists").select("*");
     if (error) return [];
     return data;

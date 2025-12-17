@@ -1,6 +1,8 @@
 import { Instagram, Twitter, Facebook, Phone } from "lucide-react";
 import { getSpecialists } from "@/app/actions";
 import Link from "next/link"; // Import Link for booking navigation
+import { Specialist as SpecialistType } from "@/lib/data";
+import Image from "next/image";
 
 export async function Specialists() {
     const specialists = await getSpecialists();
@@ -16,15 +18,17 @@ export async function Specialists() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {specialists.map((specialist: any) => (
+                    {specialists.map((specialist: SpecialistType) => (
                         <div key={specialist.id} className="group relative overflow-hidden rounded-2xl">
-                            {/* Placeholder for Image if not exists, or we can use a div with color */}
+                            {/* Proportional aspect ratio container */}
                             <div className="aspect-[3/4] bg-secondary/50 relative overflow-hidden">
                                 {specialist.image ? (
-                                    <img
+                                    <Image
                                         src={specialist.image}
                                         alt={specialist.name}
-                                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                        fill
+                                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                     />
                                 ) : (
                                     <div className="absolute inset-0 flex items-center justify-center text-primary/20 font-serif text-9xl font-bold select-none">
@@ -33,7 +37,7 @@ export async function Specialists() {
                                 )}
 
                                 {/* Overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white z-10">
                                     <h3 className="text-xl font-bold">{specialist.name}</h3>
                                     <p className="text-sm text-white/80 mb-4">{specialist.role}</p>
                                     <p className="text-sm text-white/70 mb-4 opacity-0 group-hover:opacity-100 transition-opacity delay-100 duration-300 transform translate-y-4 group-hover:translate-y-0 line-clamp-3">

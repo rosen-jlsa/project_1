@@ -81,7 +81,7 @@ export function getLocalBookings(): Booking[] {
     try {
         const data = fs.readFileSync(BOOKINGS_FILE_PATH, 'utf-8');
         return JSON.parse(data);
-    } catch (error) {
+    } catch {
         return [];
     }
 }

@@ -2,10 +2,11 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { createBooking, getServices, getBookedSlots, getSpecialists } from "@/app/actions";
-import { Clock, User, CheckCircle, AlertCircle, Calendar as CalendarIcon } from "lucide-react";
+import { Clock, User, CheckCircle, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { Specialist } from "@/lib/data";
+import Image from "next/image";
 
 // Types
 type Service = {
@@ -213,7 +214,7 @@ function BookingWizardContent() {
                             <h3 className="text-2xl font-serif font-bold text-primary mb-6">
                                 {specialist ? (
                                     <div className="flex items-center gap-3">
-                                        {specialist.image && <img src={specialist.image} alt={specialist.name} className="w-10 h-10 rounded-full object-cover" />}
+                                        {specialist.image && <Image src={specialist.image} alt={specialist.name} width={40} height={40} className="w-10 h-10 rounded-full object-cover" />}
                                         <span>Booking with {specialist.name}</span>
                                     </div>
                                 ) : (
