@@ -12,35 +12,71 @@ export async function adminLogin(formData: FormData) {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
-    const adminEmail = process.env.ADMIN_EMAIL;
-    const adminPassword = process.env.ADMIN_PASSWORD;
+    if (!isSupabaseConfigured) {
+        const adminEmail = process.env.ADMIN_EMAIL;
+        const adminPassword = process.env.ADMIN_PASSWORD;
 
-    if (!adminEmail || !adminPassword) {
-        console.error("Admin credentials are not properly configured in environment variables.");
-        return { success: false, message: "Server configuration error" };
+        if (!adminEmail || !adminPassword) {
+            console.error("Admin credentials are not properly configured in environment variables.");
+            return { success: false, message: "Server configuration error" };
+        }
+
+        if (email === adminEmail && password === adminPassword) {
+            (await cookies()).set("admin_session", "true", {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                maxAge: 60 * 60 * 24, // 1 day
+                path: "/",
+            });
+            return { success: true };
+        }
+        return { success: false, message: "Invalid email or password" };
     }
 
-    if (email === adminEmail && password === adminPassword) {
-        // Set cookie
-        (await cookies()).set("admin_session", "true", {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            maxAge: 60 * 60 * 24, // 1 day
-            path: "/",
-        });
-        return { success: true };
+    const supabase = await createSessionClient();
+    const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+    });
+
+    if (error) {
+        return { success: false, message: error.message };
     }
 
-    return { success: false, message: "Invalid email or password" };
+    return { success: true };
 }
 
 export async function checkAdminSession() {
-    const session = (await cookies()).get("admin_session");
-    return !!session?.value;
+    if (!isSupabaseConfigured) {
+        const session = (await cookies()).get("admin_session");
+        return !!session?.value;
+    }
+
+    const supabase = await createSessionClient();
+    const { data: { user }, error } = await supabase.auth.getUser();
+
+    if (error || !user) return false;
+
+    // Check for role in user_roles
+    const { data, error: roleError } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id)
+        .single();
+
+    if (roleError || !data) return false;
+
+    return ['sysadmin', 'moderator'].includes(data.role);
 }
 
 export async function logoutAdmin() {
-    (await cookies()).delete("admin_session");
+    if (!isSupabaseConfigured) {
+        (await cookies()).delete("admin_session");
+        return { success: true };
+    }
+
+    const supabase = await createSessionClient();
+    await supabase.auth.signOut();
     return { success: true };
 }
 
