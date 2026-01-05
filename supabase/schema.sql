@@ -19,6 +19,7 @@ CREATE TABLE bookings (
   booking_date DATE NOT NULL,
   booking_time TIME NOT NULL,
   status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
+  approval_token UUID,
   notes TEXT
 );
 -- Create User Roles Table (RBAC)
