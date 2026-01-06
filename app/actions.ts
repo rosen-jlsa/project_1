@@ -7,6 +7,7 @@ import {
     getLocalSpecialists, saveLocalSpecialist, deleteLocalSpecialist, Specialist,
     getLocalBookings, saveLocalBooking, updateLocalBookingStatus, Booking
 } from "@/lib/data";
+import { sendAdminApprovalEmail } from "@/lib/email";
 
 export async function adminLogin(formData: FormData) {
     const email = formData.get("email") as string;
@@ -138,6 +139,7 @@ export async function createBooking(prevState: ActionState | null, formData: For
     }
 
     const fullName = `${firstName} ${lastName}`;
+    const approvalToken = crypto.randomUUID(); // Generate secure token
 
     // Basic validation for time range (10:00 - 18:00)
     const hour = parseInt(time.split(":")[0]);
@@ -166,25 +168,47 @@ export async function createBooking(prevState: ActionState | null, formData: For
     }
 
     const supabase = await createSessionClient();
-    const { error } = await supabase.from("bookings").insert({
+    const { data: newBooking, error } = await supabase.from("bookings").insert({
         service_id: serviceId,
-        specialist_id: specialistId || null, // Assuming column exists or is tolerated
+        specialist_id: specialistId || null,
         booking_date: date,
         booking_time: time,
         client_name: fullName,
         client_email: email,
         client_phone: phone,
         status: "pending",
+        approval_token: approvalToken
     })
         .select(`*, services:services(*)`)
         .single();
 
-    // ... existing error handling ...
     if (error) {
+        console.error("Booking creation error:", error);
         return { message: "Failed to create booking. Please try again.", success: false };
     }
 
-    // ... existing email sending ...
+    // Send admin approval email
+    if (newBooking) {
+        const services = await getServices();
+        const serviceName = services.find(s => s.id === newBooking.service_id)?.name || "Unknown Service";
+
+        // Construct approval link
+        // This should be based on your deployment URL
+        const baseUrl = process.env.NODE_ENV === 'production'
+            ? 'https://your-production-url.com' // IMPORTANT: Replace with your actual production URL
+            : 'http://localhost:3000';
+        const approvalLink = `${baseUrl}/api/booking/approve?token=${approvalToken}`;
+
+        await sendAdminApprovalEmail({
+            ...newBooking,
+            services: { name: serviceName },
+            client_name: newBooking.client_name,
+            booking_date: newBooking.booking_date,
+            booking_time: newBooking.booking_time,
+            client_phone: newBooking.client_phone,
+            client_email: newBooking.client_email,
+        }, approvalLink);
+    }
 
     return { message: "Booking request sent! We will contact you shortly.", success: true };
 }

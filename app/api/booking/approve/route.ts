@@ -9,10 +9,10 @@ import { sendClientConfirmationEmail } from '@/lib/email';
 
 export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
-    const bookingId = searchParams.get('id');
+    const token = searchParams.get('token');
 
-    if (!bookingId) {
-        return NextResponse.json({ error: 'Missing booking ID' }, { status: 400 });
+    if (!token) {
+        return NextResponse.json({ error: 'Missing approval token' }, { status: 400 });
     }
 
     // Check if Supabase is configured
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     const { data: booking, error: updateError } = await supabaseAdmin
         .from('bookings')
         .update({ status: 'confirmed' })
-        .eq('id', bookingId)
+        .eq('approval_token', token)
         .select('*, services(name)')
         .single();
 

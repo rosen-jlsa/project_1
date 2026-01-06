@@ -128,7 +128,11 @@ function BookingWizardContent() {
     };
 
     const handleSubmit = async () => {
+        if (!validateForm()) return; // Re-validate before submission
+
         setIsSubmitting(true);
+        setMessage(null); // Clear previous messages
+
         const formData = new FormData();
         if (selectedService) formData.append("serviceId", selectedService.id);
         if (specialistId) formData.append("specialistId", specialistId);
@@ -139,15 +143,21 @@ function BookingWizardContent() {
         formData.append("email", email);
         formData.append("phone", phone);
 
-        const result = await createBooking(null, formData);
+        try {
+            const result = await createBooking(null, formData);
 
-        if (result.success) {
-            setMessage({ text: result.message, type: 'success' });
-            setStep(4);
-        } else {
-            setMessage({ text: result.message, type: 'error' });
+            if (result.success) {
+                setMessage({ text: result.message, type: 'success' });
+                setStep(4);
+            } else {
+                setMessage({ text: result.message || "An unknown error occurred.", type: 'error' });
+            }
+        } catch (error) {
+            console.error("Submission error:", error);
+            setMessage({ text: "A server error occurred. Please try again later.", type: 'error' });
+        } finally {
+            setIsSubmitting(false);
         }
-        setIsSubmitting(false);
     };
 
     // Get tomorrow's date as min date

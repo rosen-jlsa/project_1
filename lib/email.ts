@@ -20,12 +20,12 @@ interface BookingDetails {
 
 export async function sendAdminApprovalEmail(booking: BookingDetails, approvalLink: string) {
     if (!resend) {
+        console.warn("Email sending is mocked. RESEND_API_KEY is not configured.");
         return { success: true, id: 'mock-id' };
     }
 
     if (!ADMIN_EMAIL) {
-        console.error("Admin Email not configured.");
-        return { success: false, error: "Server Configuration Error" };
+        throw new Error("Admin Email not configured. Cannot send approval email.");
     }
 
     try {
@@ -47,13 +47,15 @@ export async function sendAdminApprovalEmail(booking: BookingDetails, approvalLi
 
         if (error) {
             console.error('Resend Error:', error);
-            return { success: false, error };
+            // Throw an error to be caught by the calling function
+            throw new Error(`Failed to send email: ${error.message}`);
         }
 
         return { success: true, data };
     } catch (error) {
         console.error('Email Sending Failed:', error);
-        return { success: false, error };
+        // Re-throw the error to ensure the caller is aware of the failure
+        throw error;
     }
 }
 
