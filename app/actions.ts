@@ -189,25 +189,33 @@ export async function createBooking(prevState: ActionState | null, formData: For
 
     // Send admin approval email
     if (newBooking) {
-        const services = await getServices();
-        const serviceName = services.find(s => s.id === newBooking.service_id)?.name || "Unknown Service";
+        try {
+            const services = await getServices();
+            const serviceName = services.find(s => s.id === newBooking.service_id)?.name || "Unknown Service";
 
-        // Construct approval link
-        // This should be based on your deployment URL
-        const baseUrl = process.env.NODE_ENV === 'production'
-            ? 'https://your-production-url.com' // IMPORTANT: Replace with your actual production URL
-            : 'http://localhost:3000';
-        const approvalLink = `${baseUrl}/api/booking/approve?token=${approvalToken}`;
+            // Construct approval link
+            const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
+            const approvalLink = `${baseUrl}/api/booking/approve?token=${approvalToken}`;
 
-        await sendAdminApprovalEmail({
-            ...newBooking,
-            services: { name: serviceName },
-            client_name: newBooking.client_name,
-            booking_date: newBooking.booking_date,
-            booking_time: newBooking.booking_time,
-            client_phone: newBooking.client_phone,
-            client_email: newBooking.client_email,
-        }, approvalLink);
+            await sendAdminApprovalEmail({
+                ...newBooking,
+                services: { name: serviceName },
+                client_name: newBooking.client_name,
+                booking_date: newBooking.booking_date,
+                booking_time: newBooking.booking_time,
+                client_phone: newBooking.client_phone,
+                client_email: newBooking.client_email,
+            }, approvalLink);
+        } catch (emailError) {
+            console.error("Failed to send admin approval email:", emailError);
+            // Even if the email fails, the booking is still created.
+            // You might want to add a retry mechanism or a dashboard warning for the admin.
+            // For now, we'll return a success message but include a warning about the notification.
+            return {
+                message: "Booking created, but failed to send admin notification. Please contact the salon directly.",
+                success: true // The booking itself was successful.
+            };
+        }
     }
 
     return { message: "Booking request sent! We will contact you shortly.", success: true };
@@ -253,7 +261,7 @@ export async function getBookedSlots(date: string, specialistId?: string) {
         .from("bookings")
         .select("booking_time")
         .eq("booking_date", date)
-        .neq("status", "rejected");
+        .in("status", ["pending", "approved"]);
 
     if (specialistId) {
         query = query.eq("specialist_id", specialistId);
@@ -262,7 +270,7 @@ export async function getBookedSlots(date: string, specialistId?: string) {
     const { data, error } = await query;
 
     if (error) {
-        // console.error("Error fetching booked slots:", error);
+        console.error("Error fetching booked slots:", error);
         return [];
     }
 

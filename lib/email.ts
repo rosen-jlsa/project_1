@@ -6,7 +6,8 @@ const resend = process.env.RESEND_API_KEY
     ? new Resend(process.env.RESEND_API_KEY)
     : null;
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL; // Must be set in environment variables
+// Use environment variable for admin email, with a fallback for convenience.
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "miglena.todorova75@gmail.com";
 
 interface BookingDetails {
     client_name: string;
@@ -24,6 +25,7 @@ export async function sendAdminApprovalEmail(booking: BookingDetails, approvalLi
         return { success: true, id: 'mock-id' };
     }
 
+    // This check is now redundant since the email is hardcoded, but kept for safety.
     if (!ADMIN_EMAIL) {
         throw new Error("Admin Email not configured. Cannot send approval email.");
     }
@@ -61,10 +63,16 @@ export async function sendAdminApprovalEmail(booking: BookingDetails, approvalLi
 
 export async function sendClientConfirmationEmail(booking: BookingDetails) {
     if (!resend) {
+        console.warn("Email sending is mocked for client confirmation. RESEND_API_KEY is not configured.");
         return { success: true, id: 'mock-id' };
     }
 
-    if (!booking.client_email) return { success: false, error: 'No client email' };
+    if (!booking.client_email) {
+        console.error("Client email is missing, cannot send confirmation.");
+        // We don't throw here as the admin flow might still succeed.
+        // This is a business logic decision. For now, we just log and return.
+        return { success: false, error: 'No client email' };
+    }
 
     try {
         const { data, error } = await resend.emails.send({
@@ -83,13 +91,15 @@ export async function sendClientConfirmationEmail(booking: BookingDetails) {
         });
 
         if (error) {
-            console.error('Resend Error:', error);
-            return { success: false, error };
+            console.error('Resend Error (Client Email):', error);
+            // Throw an error to be caught by the calling function (e.g., the approval API route)
+            throw new Error(`Failed to send client confirmation email: ${error.message}`);
         }
 
         return { success: true, data };
     } catch (error) {
-        console.error('Email Sending Failed:', error);
-        return { success: false, error };
+        console.error('Client Email Sending Failed:', error);
+        // Re-throw the error to ensure the caller is aware of the failure
+        throw error;
     }
 }

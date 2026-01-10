@@ -7,10 +7,22 @@ CREATE TABLE specialists (
   email TEXT NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+-- Create Services Table
+CREATE TABLE services (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    name TEXT NOT NULL,
+    category TEXT NOT NULL,
+    price NUMERIC(10, 2) NOT NULL,
+    duration INTEGER NOT NULL, -- Duration in minutes
+    specialist_ids UUID[], -- Array of specialist IDs who can perform this service
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
 -- Create Bookings Table
 CREATE TABLE bookings (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  service_id UUID REFERENCES services(id) ON DELETE SET NULL,
   specialist_id UUID REFERENCES specialists(id) ON DELETE CASCADE,
   client_name TEXT NOT NULL,
   client_phone TEXT NOT NULL,

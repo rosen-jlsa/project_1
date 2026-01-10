@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     // 1. Update booking status
     const { data: booking, error: updateError } = await supabaseAdmin
         .from('bookings')
-        .update({ status: 'confirmed' })
+        .update({ status: 'approved' })
         .eq('approval_token', token)
         .select('*, services(name)')
         .single();
