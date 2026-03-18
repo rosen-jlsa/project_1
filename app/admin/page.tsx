@@ -76,6 +76,18 @@ export default function AdminDashboard() {
                         >
                             Manage Specialists
                         </a>
+                        <a
+                            href="/admin/services"
+                            className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-primary/90 transition-colors"
+                        >
+                            Manage Services
+                        </a>
+                        <a
+                            href="/admin/gallery"
+                            className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-primary/90 transition-colors"
+                        >
+                            Manage Gallery
+                        </a>
                         <div className="bg-white px-4 py-2 rounded-lg shadow-sm text-sm text-muted-foreground">
                             {bookings.filter(b => b.status === 'pending').length} Pending Requests
                         </div>

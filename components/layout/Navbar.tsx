@@ -14,6 +14,7 @@ export function Navbar() {
                     <Link href="/" className="hover:text-primary transition-colors">Home</Link>
                     <Link href="#services" className="hover:text-primary transition-colors">Services</Link>
                     <Link href="/#specialists" className="hover:text-primary transition-colors">Specialists</Link>
+                    <Link href="/gallery" className="hover:text-primary transition-colors">Gallery</Link>
                     <Link href="/reviews" className="hover:text-primary transition-colors">Reviews</Link>
                 </div>
 

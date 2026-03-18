@@ -1,29 +1,12 @@
 [
   {
     "id": "1",
-    "name": "Alex Rivera",
-    "role": "Master Barber",
-    "bio": "Specializing in classic cuts and modern fades with over 10 years of experience.",
+    "name": "Miglena Todorova",
+    "role": "Pro Hair Specialist",
+    "bio": "The main specialist and expert in all hair treatments, cuts, and coloring.",
     "image": "/specialist-1.jpg",
-    "phone": "+359 88 123 4567",
-    "instagram": "alexcuts",
-    "facebook": "alexriverabarber"
-  },
-  {
-    "id": "2",
-    "name": "Sarah Chen",
-    "role": "Senior Stylist",
-    "bio": "Expert in color transformations and creative styling for all hair types.",
-    "image": "/specialist-2.jpg",
-    "phone": "+359 88 987 6543",
-    "instagram": "stylebysarah"
-  },
-  {
-    "id": "3",
-    "name": "Mike Ross",
-    "role": "Style Director",
-    "bio": "Award-winning stylist known for precision cutting and celebrity styling.",
-    "image": "/specialist-3.jpg",
-    "phone": "+359 88 555 0123"
+    "phone": "+359 89 786 5829",
+    "instagram": "miglena_hair",
+    "facebook": "Megi75f"
   }
 ]

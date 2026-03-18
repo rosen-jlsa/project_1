@@ -20,9 +20,7 @@ export function Hero() {
                     <span className="text-accent italic">Just for You</span>
                 </h1>
 
-                <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-                    Experience world-class hair, beauty, and nail services in an environment designed for your absolute comfort and relaxation.
-                </p>
+                    Experience world-class hair services in an environment designed for your absolute comfort and relaxation.
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                     <Link

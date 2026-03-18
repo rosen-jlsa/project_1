@@ -20,26 +20,26 @@ export default function ReviewsPage() {
     const [reviews, setReviews] = useState<Review[]>([
         {
             id: 1,
-            name: "Maria Ivanova",
+            name: "Yuliana Tencheva",
             rating: 5,
-            comment: "Amazing service! The staff is incredibly professional and the atmosphere is so relaxing. I had a wonderful experience with my haircut and styling.",
-            date: "2025-11-28",
+            comment: "Megi is the best! Very attentive to detail and knows exactly what your hair needs. I wouldn't trust anyone else with my color.",
+            date: "2024-05-12",
             likes: 12
         },
         {
             id: 2,
-            name: "Elena Petrova",
+            name: "Desislava Petrova",
             rating: 5,
-            comment: "Best beauty salon in town! The attention to detail is outstanding. My nails look perfect and the manicure lasted for weeks. Highly recommend!",
-            date: "2025-11-25",
+            comment: "I visit Studio Megi regularly. The atmosphere is lovely, and Megi is a true professional. My haircuts always look perfect and last a long time.",
+            date: "2024-08-20",
             likes: 8
         },
         {
             id: 3,
-            name: "Svetlana Georgieva",
-            rating: 4,
-            comment: "Great experience overall. The specialists are very skilled and friendly. Only minor wait time, but it was worth it. Will definitely come back!",
-            date: "2025-11-20",
+            name: "Krasimira Ivanova",
+            rating: 5,
+            comment: "Excellent service! From the moment you walk in, you feel pampered. The hair treatments are top-notch and Megi gives great advice for home care.",
+            date: "2024-11-05",
             likes: 5
         }
     ]);

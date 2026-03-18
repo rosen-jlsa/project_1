@@ -1,48 +1,45 @@
-# Salon Booking App
+# Salon Booking App (Project 1)
 
-A simple, efficient booking management system for salon services.
+A professional, high-performance booking management system built for high-end hair salons.
 
-## Application Purpose
+## Project Overview
 
-This application allows clients to view services/specialists and book appointments. It includes an admin interface for managing specialists and approving bookings.
+This application provides a seamless experience for clients to explore salon services, view transformations in a gallery, and book appointments with experts. It features a dual-mode data system (Supabase or Local JSON) for maximum reliability during development and production.
+
+### Key Features
+- **Dynamic Booking Wizard**: Intelligent slot selection within business hours (10:00 - 18:00).
+- **Interactive Gallery**: "Before & After" photo transformations.
+- **Admin Dashboard**: Secure management of bookings and specialists.
+- **Automated Workflow**: Email notifications and token-based booking approvals.
 
 ## Getting Started
 
 ### Prerequisites
-
-- Node.js 18+
+- **Node.js**: 18.x or higher
+- **Directory**: All commands should be run from within the `project_1/` folder.
 
 ### Setup & Run
-
-1. Clone the repo and install dependencies:
+1. Navigate to the project folder:
+   ```bash
+   cd project_1
+   ```
+2. Install dependencies:
    ```bash
    npm install
    ```
-2. Create `.env.local` (see variable list below).
-3. Run locally:
+3. Configure environment variables (see `.env.example`).
+4. Launch development server:
    ```bash
    npm run dev
    ```
-4. Build for production:
-   ```bash
-   npm run build
-   npm run start
-   ```
 
-### Environment Variables
+## Documentation
+For a detailed list of recent changes, additions, and fixes, please refer to the **[CHANGELOG.md](./CHANGELOG.md)**.
 
-Required variables for the application to function correctly:
+## Technical Stack
+- **Framework**: Next.js 16 (App Router)
+- **Styling**: Tailwind CSS & Animate.css
+- **Database**: Supabase (with Local Mock fallback)
+- **Icons**: Lucide React
+- **Maps**: React Leaflet
 
-| Variable | Description |
-| :--- | :--- |
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase Project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase Anonymous Key (Client-side safe) |
-
-> **Note**: Additional server-side keys may be required for full admin functionality. Do NOT commit `.env.local` to version control.
-
-## Project Structure
-
-- `app/`: Next.js App Router pages and API endpoints.
-- `components/`: UI components.
-- `lib/`: Shared utilities (Supabase client, email sender).
-- `public/`: Static files.

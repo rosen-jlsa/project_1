@@ -5,7 +5,7 @@ export async function Services() {
     const services = await getServices();
 
     // Group services by category
-    const categories = Array.from(new Set(services?.map(s => s.category) || []));
+    const categories = Array.from(new Set(services?.map((s: any) => s.category) || []));
 
     return (
         <section id="services" className="py-20 bg-secondary/30">
@@ -18,8 +18,8 @@ export async function Services() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {categories.map(category => {
-                        const categoryServices = services?.filter(s => s.category === category);
+                    {categories.map((category: any) => {
+                        const categoryServices = services?.filter((s: any) => s.category === category);
                         return (
                             <div key={category} className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
                                 <div className="flex items-center gap-3 mb-6">
@@ -33,7 +33,7 @@ export async function Services() {
                                 </div>
 
                                 <ul className="space-y-4">
-                                    {categoryServices?.map(service => (
+                                    {categoryServices?.map((service: any) => (
                                         <li key={service.id} className="flex justify-between items-start border-b border-gray-50 pb-2 last:border-0">
                                             <div>
                                                 <h4 className="font-medium text-gray-900">{service.name}</h4>

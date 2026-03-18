@@ -29,23 +29,6 @@ const INITIAL_DATA: Specialist[] = [
         phone: "+359 89 786 5829",
         instagram: "miglena_hair",
         facebook: "Megi75f"
-    },
-    {
-        id: "2",
-        name: "Monika",
-        role: "Beautician",
-        bio: "Expert beautician providing top-tier facial and body treatments.",
-        image: "/specialist-2.jpg",
-        phone: "+359 88 123 4567",
-        instagram: "monika_beauty"
-    },
-    {
-        id: "3",
-        name: "Galina Petrova",
-        role: "Manicurist",
-        bio: "Professional manicurist offering classic and gel nail services.",
-        image: "/specialist-3.jpg",
-        phone: "+359 88 987 6543"
     }
 ];
 

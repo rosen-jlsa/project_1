@@ -22,6 +22,28 @@ CREATE TABLE bookings (
   approval_token UUID,
   notes TEXT
 );
+-- Create Services Table
+CREATE TABLE services (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name TEXT NOT NULL,
+  category TEXT NOT NULL CHECK (category IN ('Women', 'Men', 'Children', 'Piercing')),
+  price NUMERIC NOT NULL,
+  duration INTEGER NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+-- Create Service Specialists Relationship Table
+CREATE TABLE service_specialists (
+  service_id UUID REFERENCES services(id) ON DELETE CASCADE,
+  specialist_id UUID REFERENCES specialists(id) ON DELETE CASCADE,
+  PRIMARY KEY (service_id, specialist_id)
+);
+-- Create Gallery Images Table
+CREATE TABLE gallery_images (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  image_url TEXT NOT NULL,
+  caption TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
 -- Create User Roles Table (RBAC)
 CREATE TABLE user_roles (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -34,6 +56,9 @@ CREATE TABLE user_roles (
 ALTER TABLE specialists ENABLE ROW LEVEL SECURITY;
 ALTER TABLE bookings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_roles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE services ENABLE ROW LEVEL SECURITY;
+ALTER TABLE service_specialists ENABLE ROW LEVEL SECURITY;
+ALTER TABLE gallery_images ENABLE ROW LEVEL SECURITY;
 -- Policies for user_roles
 CREATE POLICY "Read own role" ON user_roles FOR
 SELECT TO authenticated USING (auth.uid() = user_id);
@@ -42,7 +67,35 @@ CREATE POLICY "Sysadmins manage roles" ON user_roles FOR ALL TO authenticated US
     SELECT 1
     FROM user_roles
     WHERE user_id = auth.uid()
+    WHERE user_id = auth.uid()
       AND role = 'sysadmin'
+  )
+);
+-- Policies for Services and Service Specialists
+-- Public can view services
+CREATE POLICY "Public read services" ON services FOR
+SELECT TO anon, authenticated USING (true);
+CREATE POLICY "Public read service_specialists" ON service_specialists FOR
+SELECT TO anon, authenticated USING (true);
+-- Only admins/moderators can manage services
+CREATE POLICY "Admins manage services" ON services FOR ALL TO authenticated USING (
+  EXISTS (
+    SELECT 1 FROM user_roles WHERE user_id = auth.uid() AND role IN ('sysadmin', 'moderator')
+  )
+);
+CREATE POLICY "Admins manage service_specialists" ON service_specialists FOR ALL TO authenticated USING (
+  EXISTS (
+    SELECT 1 FROM user_roles WHERE user_id = auth.uid() AND role IN ('sysadmin', 'moderator')
+  )
+);
+-- Policies for Gallery Images
+-- Public can view gallery images
+CREATE POLICY "Public read gallery_images" ON gallery_images FOR
+SELECT TO anon, authenticated USING (true);
+-- Only admins/moderators can manage gallery images
+CREATE POLICY "Admins manage gallery_images" ON gallery_images FOR ALL TO authenticated USING (
+  EXISTS (
+    SELECT 1 FROM user_roles WHERE user_id = auth.uid() AND role IN ('sysadmin', 'moderator')
   )
 );
 -- Policies for Specialists
@@ -90,6 +143,4 @@ VALUES (
     'Miglena Todorova',
     'Hairdresser',
     'miglena.todorova75@gmail.com'
-  ),
-  ('Monika', 'Beautician', 'monika@salon.com'),
-  ('Galina', 'Manicurist', 'galina@salon.com');
+  );

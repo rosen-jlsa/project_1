@@ -1,0 +1,50 @@
+[
+  {
+    "id": "1",
+    "name": "Women's Haircut",
+    "category": "Women",
+    "price": 50,
+    "duration": 60,
+    "specialistIds": ["1"]
+  },
+  {
+    "id": "2",
+    "name": "Men's Haircut",
+    "category": "Men",
+    "price": 30,
+    "duration": 30,
+    "specialistIds": ["1"]
+  },
+  {
+    "id": "3",
+    "name": "Child's Haircut",
+    "category": "Children",
+    "price": 25,
+    "duration": 30,
+    "specialistIds": ["1"]
+  },
+  {
+    "id": "4",
+    "name": "Hair Coloring",
+    "category": "Women",
+    "price": 120,
+    "duration": 120,
+    "specialistIds": ["1"]
+  },
+  {
+    "id": "5",
+    "name": "Blow Dry & Styling",
+    "category": "Women",
+    "price": 40,
+    "duration": 45,
+    "specialistIds": ["1"]
+  },
+  {
+    "id": "14",
+    "name": "Ear Piercing",
+    "category": "Piercing",
+    "price": 35,
+    "duration": 15,
+    "specialistIds": ["1"]
+  }
+]

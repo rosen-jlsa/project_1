@@ -175,7 +175,7 @@ function BookingWizardContent() {
             const specServices = services.filter(s => s.specialistIds?.includes(specialistId));
             return Array.from(new Set(specServices.map(s => s.category)));
         }
-        return ["Women", "Men", "Children", "Face", "Body", "Nails", "Piercing"];
+        return ["Women", "Men", "Children", "Piercing"];
     }
     const categories = getCategories();
 
@@ -311,7 +311,8 @@ function BookingWizardContent() {
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-muted-foreground mb-2">Select Time</label>
+                                        <label className="block text-sm font-medium text-muted-foreground mb-1">Select Time</label>
+                                        <p className="text-xs text-primary/60 mb-3 font-medium">Opening hours: 10:00 - 18:00 (Mon-Sat)</p>
                                         {!time ? (
                                             <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-[300px] overflow-y-auto p-1">
                                                 {TIME_SLOTS.map((t) => {

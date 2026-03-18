@@ -6,7 +6,7 @@ export function Footer() {
     return (
         <footer className="bg-white border-t border-gray-100 pt-16 pb-8">
             <div className="container mx-auto px-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
                     {/* Contact & Socials */}
                     <div className="space-y-6">
                         <div>
@@ -44,10 +44,29 @@ export function Footer() {
                         </div>
                     </div>
 
+                    {/* Business Hours */}
+                    <div className="space-y-6">
+                         <h3 className="text-xl font-serif font-bold text-primary mb-4">Business Hours</h3>
+                         <ul className="space-y-3 text-muted-foreground">
+                             <li className="flex justify-between border-b border-gray-100 pb-2">
+                                 <span>Monday - Friday</span>
+                                 <span className="font-medium text-primary">10:00 - 18:00</span>
+                             </li>
+                             <li className="flex justify-between border-b border-gray-100 pb-2">
+                                 <span>Saturday</span>
+                                 <span className="font-medium text-primary">10:00 - 18:00</span>
+                             </li>
+                             <li className="flex justify-between pb-2 text-primary/70">
+                                 <span>Sunday</span>
+                                 <span className="font-medium">Closed</span>
+                             </li>
+                         </ul>
+                    </div>
+
                     {/* Map Section */}
                     <div className="h-[300px] w-full rounded-xl overflow-hidden shadow-lg border border-gray-100">
                         {/* Coordinates for a generic location, can be updated */}
-                        <MapWrapper pos={[42.52190, 27.45190]} />
+                        <MapWrapper pos={[42.520136, 27.450848]} />
                     </div>
                 </div>
 

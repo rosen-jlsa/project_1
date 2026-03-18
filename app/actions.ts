@@ -83,35 +83,22 @@ export async function logoutAdmin() {
 
 export async function getServices() {
     if (!isSupabaseConfigured) {
-        // Return mock data if Supabase is not connected
-        // Return mock data if Supabase is not connected
-        return [
-            // Miglena (Hair) - ID: 1
-            { id: "1", name: "Women's Haircut", category: "Women", price: 50, duration: 60, specialistIds: ["1"] },
-            { id: "2", name: "Men's Haircut", category: "Men", price: 30, duration: 30, specialistIds: ["1"] },
-            { id: "3", name: "Child's Haircut", category: "Children", price: 25, duration: 30, specialistIds: ["1"] },
-            { id: "4", name: "Hair Coloring", category: "Women", price: 120, duration: 120, specialistIds: ["1"] },
-            { id: "5", name: "Blow Dry & Styling", category: "Women", price: 40, duration: 45, specialistIds: ["1"] },
-
-            // Monika (Beautician) - ID: 2
-            { id: "6", name: "Basic Facial", category: "Face", price: 60, duration: 60, specialistIds: ["2"] },
-            { id: "7", name: "Deep Cleaning Facial", category: "Face", price: 80, duration: 90, specialistIds: ["2"] },
-            { id: "8", name: "Eyebrow Shaping", category: "Face", price: 15, duration: 15, specialistIds: ["2"] },
-            { id: "9", name: "Full Body Waxing", category: "Body", price: 100, duration: 90, specialistIds: ["2"] },
-
-            // Galina (Manicurist) - ID: 3
-            { id: "10", name: "Classic Manicure", category: "Nails", price: 30, duration: 45, specialistIds: ["3"] },
-            { id: "11", name: "Gel Manicure", category: "Nails", price: 50, duration: 60, specialistIds: ["3"] },
-            { id: "12", name: "Pedicure", category: "Nails", price: 55, duration: 60, specialistIds: ["3"] },
-            { id: "13", name: "Gel Pedicure", category: "Nails", price: 70, duration: 75, specialistIds: ["3"] },
-
-            // Piercing (Miglena/Monika might do this, assigning to Miglena for now or general)
-            { id: "14", name: "Ear Piercing", category: "Piercing", price: 35, duration: 15, specialistIds: ["1"] },
-        ];
+        try {
+            const fs = require('fs');
+            const path = require('path');
+            const servicesPath = path.join(process.cwd(), 'data', 'services.json');
+            if (fs.existsSync(servicesPath)) {
+                const data = fs.readFileSync(servicesPath, 'utf8');
+                return JSON.parse(data);
+            }
+        } catch (e) {
+            console.error("Failed to read local services", e);
+        }
+        return [];
     }
 
     const supabase = await createSessionClient();
-    const { data, error } = await supabase.from("services").select("*");
+    const { data, error } = await supabase.from("services").select("*").order("created_at", { ascending: true });
     if (error) {
         console.error("Error fetching services:", error);
         return [];
@@ -190,7 +177,7 @@ export async function createBooking(prevState: ActionState | null, formData: For
     // Send admin approval email
     if (newBooking) {
         const services = await getServices();
-        const serviceName = services.find(s => s.id === newBooking.service_id)?.name || "Unknown Service";
+        const serviceName = services.find((s: any) => s.id === newBooking.service_id)?.name || "Unknown Service";
 
         // Construct approval link
         // This should be based on your deployment URL
@@ -397,3 +384,37 @@ export async function removeSpecialist(id: string) {
     return { success: false, message: "Database not connected" };
 }
 
+export async function getGalleryImages() {
+    if (!isSupabaseConfigured) {
+        try {
+            const fs = require('fs');
+            const path = require('path');
+            const galleryPath = path.join(process.cwd(), 'data', 'gallery.json');
+            if (fs.existsSync(galleryPath)) {
+                const data = fs.readFileSync(galleryPath, 'utf8');
+                return JSON.parse(data);
+            }
+        } catch (e) {
+            console.error("Failed to read local gallery data", e);
+        }
+        
+        // Return default attractive beauty mock images if nothing exists
+        return [
+            { id: "1", image_url: "https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=800&auto=format&fit=crop", caption: "Balayage Transformation" },
+            { id: "2", image_url: "https://images.unsplash.com/photo-1519699047748-de8e457a634e?q=80&w=800&auto=format&fit=crop", caption: "Bridal Updo" },
+            { id: "3", image_url: "https://images.unsplash.com/photo-1620331311520-246422fd82f9?q=80&w=800&auto=format&fit=crop", caption: "Precision Bob Cut" },
+            { id: "4", image_url: "https://images.unsplash.com/photo-1600948836101-f9ffda59d250?q=80&w=800&auto=format&fit=crop", caption: "Vibrant Copper Tone" },
+            { id: "5", image_url: "https://images.unsplash.com/photo-1595476140705-029dcb2d8a6b?q=80&w=800&auto=format&fit=crop", caption: "Creative Coloring" },
+            { id: "6", image_url: "https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?q=80&w=800&auto=format&fit=crop", caption: "Sleek and Straight" }
+        ];
+    }
+
+    const supabase = await createSessionClient();
+    const { data, error } = await supabase.from("gallery_images").select("*").order("created_at", { ascending: false });
+    
+    if (error) {
+        console.error("Error fetching gallery images:", error);
+        return [];
+    }
+    return data;
+}

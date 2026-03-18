@@ -17,7 +17,7 @@ export async function Specialists() {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="flex justify-center flex-wrap gap-8">
                     {specialists.map((specialist: SpecialistType) => (
                         <div key={specialist.id} className="group relative overflow-hidden rounded-2xl">
                             {/* Proportional aspect ratio container */}
