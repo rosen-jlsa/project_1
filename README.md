@@ -36,6 +36,22 @@ This application provides a seamless experience for clients to explore salon ser
 ## Documentation
 For a detailed list of recent changes, additions, and fixes, please refer to the **[CHANGELOG.md](./CHANGELOG.md)**.
 
+## Project Structure & Backend Setup
+
+### What is the `node_modules` folder?
+In simple words, `node_modules` is the **toolbox** of your project.
+- It contains all the libraries and code (like React, Tailwind, or Supabase) that other developers wrote and your project needs to work.
+- You don't write code here. When you run `npm install`, these "tools" are downloaded automatically into this folder.
+- It is excluded from the repository (via `.gitignore`) because it's very large, but anyone can recreate it by running `npm install`.
+
+### Connecting to the Backend (Supabase)
+The app uses **Supabase** as its backend. If the connection is not "fixed," the app runs in **Mock Mode** using local files in the `data/` folder.
+
+To connect your project to a live backend:
+1. Create a file named `.env` in the root directory.
+2. Copy the contents of `.env.example` into your new `.env` file.
+3. Replace the placeholder values with your actual keys from the Supabase dashboard.
+
 ## Technical Stack
 - **Framework**: Next.js 16 (App Router)
 - **Styling**: Tailwind CSS & Animate.css
