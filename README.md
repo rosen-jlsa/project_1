@@ -43,3 +43,17 @@ For a detailed list of recent changes, additions, and fixes, please refer to the
 - **Icons**: Lucide React
 - **Maps**: React Leaflet
 
+## Frequently Asked Questions (FAQ)
+
+### 1. What is the `node_modules` folder?
+Think of **`node_modules`** as a **"Toolbox"**.
+- To build this application, we use many pre-made tools (libraries) for things like icons, database connections, and web styling.
+- When you run `npm install`, these tools are downloaded into the `node_modules` folder.
+- You don't need to change anything inside this folder; it just needs to be there for the project to run.
+
+### 2. Why is my backend not connecting?
+By default, the app runs in **"Mock Mode"** using local files in the `data/` folder. To connect to a real **Supabase** backend:
+1. Create a file named `.env` in the root directory.
+2. Copy the content from `.env.example` into your new `.env` file.
+3. Fill in your actual Supabase URL and API keys.
+4. Restart the development server.
