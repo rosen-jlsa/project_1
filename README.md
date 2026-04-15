@@ -43,3 +43,19 @@ For a detailed list of recent changes, additions, and fixes, please refer to the
 - **Icons**: Lucide React
 - **Maps**: React Leaflet
 
+## Frequently Asked Questions (FAQ)
+
+### 1. What is the `node_modules` folder?
+Think of `node_modules` as a **Toolbox**.
+- Your project needs many different tools (libraries) to work, like buttons, icons, or the connection to the database.
+- Instead of writing all these tools from scratch, we "borrow" them from others.
+- The `node_modules` folder is where all these borrowed tools are kept.
+- **Why is it so big?** Because it contains everything the project needs to run correctly.
+- **Important:** You should never manually change anything inside this folder. It is managed by the command `npm install`.
+
+### 2. How do I connect the application to the backend?
+The application is currently running in **"Mock Mode"**, meaning it uses local files to store data. To connect it to a real database (Supabase):
+1. Create a new file in the root directory named `.env`.
+2. Open the `.env.example` file and copy its contents into your new `.env` file.
+3. Replace the placeholder values (like `your-project-url`) with your actual keys from Supabase and Resend.
+4. Once these variables are set, the app will automatically switch from local files to your live backend.
