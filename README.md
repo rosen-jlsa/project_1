@@ -43,3 +43,20 @@ For a detailed list of recent changes, additions, and fixes, please refer to the
 - **Icons**: Lucide React
 - **Maps**: React Leaflet
 
+## Frequently Asked Questions
+
+### What is the `node_modules` folder?
+Think of the `node_modules` folder as a **Toolbox**.
+When you build a house, you don't make your own hammers, saws, or drills from scratch—you buy them from a store. In programming, these "tools" are called "dependencies" or "packages."
+- When you run `npm install`, the computer goes to the "store" (npm) and downloads all the tools your project needs to work.
+- All those tools are stored in the `node_modules` folder.
+- You don't need to change anything inside this folder; the project just uses the tools inside it to run.
+
+### Why does it say "Backend not connected"?
+The application is designed to be smart. It has two modes:
+1. **Live Mode**: Connects to a real database (Supabase).
+2. **Mock Mode**: Works entirely on your computer using the files in the `data/` folder.
+
+If you haven't set up your Supabase account keys yet, the app automatically switches to **Mock Mode**. This allows you to test everything without needing an internet connection to a database.
+
+To connect it to a real backend, you need to add your keys to a `.env` file (see `.env.example`).
