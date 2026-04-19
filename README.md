@@ -43,3 +43,16 @@ For a detailed list of recent changes, additions, and fixes, please refer to the
 - **Icons**: Lucide React
 - **Maps**: React Leaflet
 
+## Frequently Asked Questions (FAQ)
+
+### What is the `node_modules` folder?
+Think of `node_modules` as a **"Toolbox"**.
+To build this website, we use many professional "tools" (libraries) that others have already written. Instead of writing every single line of code ourselves, we download these tools. All of them are stored in the `node_modules` folder.
+*   **Do I need to change it?** No, you should not change anything inside it.
+*   **How do I get it?** Run `npm install` and it will be created for you automatically.
+
+### Why is the backend not connected?
+The project uses a "Mock Mode" (fake data) by default so you can see how it works immediately. To connect to your **real backend** (Supabase), you need to:
+1.  Create a new file named `.env` in the root folder.
+2.  Copy the content from `.env.example` into your new `.env` file.
+3.  Replace the placeholder values with your actual Supabase keys.
