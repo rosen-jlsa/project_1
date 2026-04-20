@@ -5,6 +5,7 @@ import { getBookings, updateBookingStatus, checkAdminSession, logoutAdmin } from
 import { Check, X, Clock, Calendar, User, Phone, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type Booking = {
     id: string;
@@ -70,24 +71,30 @@ export default function AdminDashboard() {
                 <div className="flex justify-between items-center mb-8">
                     <h1 className="text-3xl font-serif font-bold text-primary">Admin Dashboard</h1>
                     <div className="flex items-center gap-4">
-                        <a
+                        <Link
                             href="/admin/specialists"
                             className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-primary/90 transition-colors"
                         >
                             Manage Specialists
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                             href="/admin/services"
                             className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-primary/90 transition-colors"
                         >
                             Manage Services
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                             href="/admin/gallery"
                             className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-primary/90 transition-colors"
                         >
                             Manage Gallery
-                        </a>
+                        </Link>
+                        <Link
+                            href="/admin/products"
+                            className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-primary/90 transition-colors"
+                        >
+                            Manage Products
+                        </Link>
                         <div className="bg-white px-4 py-2 rounded-lg shadow-sm text-sm text-muted-foreground">
                             {bookings.filter(b => b.status === 'pending').length} Pending Requests
                         </div>

@@ -1,18 +1,38 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { checkAdminSession, getServices } from "@/app/actions";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Service } from "@/lib/data";
 
-export default async function AdminServicesPage() {
-    const isAdmin = await checkAdminSession();
-    
-    if (!isAdmin) {
-        redirect("/admin/login");
-    }
+export default function AdminServicesPage() {
+    const router = useRouter();
+    const [services, setServices] = useState<Service[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    const services = await getServices();
+    useEffect(() => {
+        const init = async () => {
+            const isAdmin = await checkAdminSession();
+            if (!isAdmin) {
+                router.push("/admin/login");
+                return;
+            }
+            const data = await getServices();
+            setServices(data || []);
+            setLoading(false);
+        };
+        init();
+    }, [router]);
+
+    if (loading) return <div className="p-8 text-center text-primary">Loading services...</div>;
 
     return (
         <div className="container mx-auto px-4 py-12">
-            <h1 className="text-4xl font-serif font-bold text-primary mb-8">Manage Services</h1>
+            <div className="flex gap-4 items-center mb-8">
+                <Link href="/admin" className="text-muted-foreground hover:text-black transition-colors">&larr; Back to Dashboard</Link>
+                <h1 className="text-4xl font-serif font-bold text-primary">Manage Services</h1>
+            </div>
             
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                 <table className="w-full text-left border-collapse">
@@ -33,7 +53,7 @@ export default async function AdminServicesPage() {
                                 </td>
                             </tr>
                         ) : (
-                            services.map((service: any) => (
+                             services.map((service: Service) => (
                                 <tr key={service.id} className="border-b border-gray-50 hover:bg-secondary/10 transition-colors">
                                     <td className="p-4 font-medium text-primary">{service.name}</td>
                                     <td className="p-4 text-muted-foreground">{service.category}</td>

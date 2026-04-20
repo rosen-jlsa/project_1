@@ -1,0 +1,122 @@
+{
+  "Navigation": {
+    "home": "Home",
+    "services": "Services",
+    "gallery": "Gallery",
+    "book": "Book Now"
+  },
+  "Hero": {
+    "title": "Welcome to Our Salon",
+    "subtitle": "Cuts, Color & Style",
+    "description": "Experience world-class hair services in an environment designed for your absolute comfort and relaxation.",
+    "bookButton": "Book Now",
+    "viewServices": "View Services"
+  },
+  "Services": {
+    "title": "Our Services",
+    "subtitle": "Experience world-class hair care and styling services tailored to your unique style.",
+    "categories": {
+      "Men": "Men",
+      "Women": "Women",
+      "Children": "Children",
+      "Piercing": "Piercing",
+      "Women Therapies": "Women Therapies"
+    }
+  },
+  "ProductGallery": {
+    "title": "Products We Use",
+    "description": "We only use the highest quality professional products for the best results.",
+    "empty": "Our product gallery is currently being updated."
+  },
+  "Gallery": {
+    "title": "Our Work",
+    "subtitle": "Transformations by Miglena Todorova. Discover your next look.",
+    "empty": "Our gallery is currently being updated with amazing new looks. Check back soon!",
+    "imageCaption": "Hair Transformation"
+  },
+  "Reviews": {
+    "title": "Client Reviews",
+    "subtitle": "See what our valued clients have to say about their services.",
+    "writeReview": "Write a Review",
+    "shareExperience": "Share Your Experience",
+    "rating": "Rating",
+    "yourName": "Your Name",
+    "yourReview": "Your Review",
+    "submit": "Submit Review",
+    "cancel": "Cancel",
+    "submitting": "Submitting...",
+    "success": "Thank you for your review!",
+    "error": "Failed to submit review."
+  },
+  "Booking": {
+    "title": "Book Your Appointment"
+  },
+  "BookingWizard": {
+    "steps": {
+      "service": "Service & Time",
+      "details": "Details",
+      "review": "Review",
+      "done": "Done"
+    },
+    "selectCategory": "Select Service Category",
+    "selectService": "Select {category} Service",
+    "bookingWith": "Booking with {name}",
+    "backToCategories": "← Back to Categories",
+    "viewServices": "View services",
+    "min": "min",
+    "chooseDateTime": "Choose Date & Time",
+    "selectDate": "Select Date",
+    "max1Month": "(Max 1 month ahead)",
+    "selectTime": "Select Time",
+    "openingHours": "Opening hours: 10:00 - 18:00 (Mon-Sat)",
+    "selectedTime": "Selected Time",
+    "changeTime": "Change Time",
+    "closedSunday": "We are closed on Sundays. Please choose another day.",
+    "slotsBooked": "Some slots are already booked.",
+    "selectDateFirst": "Please select a date first.",
+    "continueToDetails": "Continue to Details",
+    "yourDetails": "Your Details",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "back": "Back",
+    "reviewBooking": "Review Booking",
+    "reviewConfirm": "Review & Confirm",
+    "appointmentDetails": "Appointment Details",
+    "service": "Service",
+    "dateTime": "Date & Time",
+    "duration": "Duration",
+    "price": "Price",
+    "yourInformation": "Your Information",
+    "name": "Name",
+    "confirming": "Confirming...",
+    "confirmBooking": "Confirm Booking",
+    "requestSent": "Request Sent!",
+    "thankYou": "Thank you, {firstName}. Your request for",
+    "on": "on",
+    "hasBeenReceived": "has been received.",
+    "statusWaiting": "Status: Waiting for Confirmation",
+    "contactShortly": "We will contact you shortly to confirm your appointment.",
+    "bookAnother": "Book Another Appointment"
+  },
+  "ServiceNames": {
+    "s1": "Women's Haircut",
+    "s2": "Women's Haircut + Wash & Blow-dry",
+    "s3": "Hair Coloring (Short/Medium/Long)",
+    "s4": "Coloring with Client's Product",
+    "s5": "Ombre / Highlights (Cap/Foil) / Lightening",
+    "s6": "Blow-dry & Styling (Short/Medium/Long)",
+    "s7": "Formal / Sporty-Elegant Updo",
+    "s8": "Men's Haircut",
+    "s9": "Men's Haircut + Wash",
+    "s10": "Child's Haircut",
+    "s11": "Ear Piercing (Studex75 + Earrings)",
+    "s12": "Nose Piercing (Studex75 + Earring)",
+    "s13": "Laminating Hair Therapy (Joico Styler)",
+    "s14": "Restorative Therapy (Keratin & Goji Berry)",
+    "s15": "Intensive Multifunctional Therapy (Argan & Panthenol)",
+    "s16": "Hydrating Therapy (Ampoule + Blow-dry)",
+    "s17": "Botox Hair Therapy (Collagen & Hyaluronic)"
+  }
+}

@@ -7,15 +7,18 @@ import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { Specialist } from "@/lib/data";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 // Types
 type Service = {
     id: string;
     name: string;
     category: string;
-    price: number;
-    duration: number;
+    price: string | number;
+    duration: string | number;
     specialistIds?: string[];
+    brand?: string;
+    icon?: string;
 };
 
 const TIME_SLOTS = [
@@ -35,6 +38,9 @@ export function BookingWizard() {
 function BookingWizardContent() {
     const searchParams = useSearchParams();
     const specialistId = searchParams.get("specialist");
+    const t = useTranslations("BookingWizard");
+    const tc = useTranslations("Services.categories");
+    const ts = useTranslations("ServiceNames");
 
     const [step, setStep] = useState(1);
     const [services, setServices] = useState<Service[]>([]);
@@ -79,7 +85,7 @@ function BookingWizardContent() {
 
         const day = new Date(newDate).getDay();
         if (day === 0) {
-            setMessage({ text: "We are closed on Sundays. Please choose another day.", type: 'error' });
+            setMessage({ text: t("closedSunday"), type: 'error' });
             setDate("");
             setBookedSlots([]);
         } else {
@@ -175,7 +181,7 @@ function BookingWizardContent() {
             const specServices = services.filter(s => s.specialistIds?.includes(specialistId));
             return Array.from(new Set(specServices.map(s => s.category)));
         }
-        return ["Women", "Men", "Children", "Piercing"];
+        return ["Women", "Men", "Children", "Piercing", "Women Therapies"];
     }
     const categories = getCategories();
 
@@ -189,30 +195,30 @@ function BookingWizardContent() {
         return true;
     });
 
-    if (loading) return <div className="text-primary animate-pulse">Loading services...</div>;
+    if (loading) return <div className="text-black font-medium animate-pulse">Loading services...</div>;
 
     return (
         <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
             {/* Progress Bar */}
-            <div className="bg-secondary p-4 flex justify-between items-center text-sm font-medium text-primary/60">
-                <div className={cn("flex items-center gap-2", step >= 1 && "text-primary")}>
-                    <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs border border-primary/20">1</span>
-                    Service & Time
+            <div className="bg-[#F5F5F5] p-4 flex justify-between items-center text-sm font-medium text-gray-500">
+                <div className={cn("flex items-center gap-2", step >= 1 && "text-[#333333] font-bold")}>
+                    <span className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs border border-gray-300">1</span>
+                    {t("steps.service")}
                 </div>
-                <div className="h-[1px] w-8 bg-primary/20" />
-                <div className={cn("flex items-center gap-2", step >= 2 && "text-primary")}>
-                    <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs border border-primary/20">2</span>
-                    Details
+                <div className="h-[1px] w-8 bg-gray-300" />
+                <div className={cn("flex items-center gap-2", step >= 2 && "text-[#333333] font-bold")}>
+                    <span className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs border border-gray-300">2</span>
+                    {t("steps.details")}
                 </div>
-                <div className="h-[1px] w-8 bg-primary/20" />
-                <div className={cn("flex items-center gap-2", step >= 3 && "text-primary")}>
-                    <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs border border-primary/20">3</span>
-                    Review
+                <div className="h-[1px] w-8 bg-gray-300" />
+                <div className={cn("flex items-center gap-2", step >= 3 && "text-[#333333] font-bold")}>
+                    <span className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs border border-gray-300">3</span>
+                    {t("steps.review")}
                 </div>
-                <div className="h-[1px] w-8 bg-primary/20" />
-                <div className={cn("flex items-center gap-2", step >= 4 && "text-primary")}>
-                    <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs border border-primary/20">4</span>
-                    Done
+                <div className="h-[1px] w-8 bg-gray-300" />
+                <div className={cn("flex items-center gap-2", step >= 4 && "text-[#333333] font-bold")}>
+                    <span className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs border border-gray-300">4</span>
+                    {t("steps.done")}
                 </div>
             </div>
 
@@ -221,14 +227,14 @@ function BookingWizardContent() {
                     <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-300">
                         {/* Category & Service Selection */}
                         <div>
-                            <h3 className="text-2xl font-serif font-bold text-primary mb-6">
+                            <h3 className="text-2xl font-serif font-bold text-[#333333] mb-6">
                                 {specialist ? (
                                     <div className="flex items-center gap-3">
                                         {specialist.image && <Image src={specialist.image} alt={specialist.name} width={40} height={40} className="w-10 h-10 rounded-full object-cover" />}
-                                        <span>Booking with {specialist.name}</span>
+                                        <span className="text-[#333333]">{t("bookingWith", { name: specialist.name })}</span>
                                     </div>
                                 ) : (
-                                    selectedCategory ? `Select ${selectedCategory} Service` : "Select Service Category"
+                                    selectedCategory ? <span className="text-[#333333]">{t("selectService", { category: tc(selectedCategory) })}</span> : <span className="text-[#333333]">{t("selectCategory")}</span>
                                 )}
                             </h3>
 
@@ -239,10 +245,10 @@ function BookingWizardContent() {
                                             key={cat}
                                             type="button"
                                             onClick={() => setSelectedCategory(cat)}
-                                            className="p-8 rounded-xl border-2 border-gray-100 hover:border-primary/50 hover:bg-secondary/30 transition-all text-left group"
+                                            className="p-8 rounded-xl border border-gray-200 bg-[#F5F5F5]/50 hover:border-primary hover:shadow-primary/20 hover:bg-primary/5 transition-all text-left group shadow-sm"
                                         >
-                                            <h4 className="text-xl font-bold text-primary group-hover:translate-x-1 transition-transform">{cat}</h4>
-                                            <p className="text-muted-foreground text-sm mt-2">View services</p>
+                                            <h4 className="text-xl font-bold text-[#333333] group-hover:translate-x-1 group-hover:text-primary transition-transform">{tc(cat)}</h4>
+                                            <p className="text-muted-foreground text-sm mt-2">{t("viewServices")}</p>
                                         </button>
                                     ))}
                                 </div>
@@ -251,9 +257,9 @@ function BookingWizardContent() {
                                     <button
                                         type="button"
                                         onClick={() => { setSelectedCategory(null); setSelectedService(null); }}
-                                        className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1 mb-4"
+                                        className="text-sm text-gray-500 hover:text-primary flex items-center gap-2 mb-6 font-medium transition-colors bg-[#F5F5F5] hover:bg-primary/10 px-4 py-2 rounded-full w-max"
                                     >
-                                        ← Back to Categories
+                                        {t("backToCategories")}
                                     </button>
                                     <div className="grid grid-cols-1 gap-3">
                                         {filteredServices.map((s) => (
@@ -262,20 +268,27 @@ function BookingWizardContent() {
                                                 type="button"
                                                 onClick={() => setSelectedService(s)}
                                                 className={cn(
-                                                    "p-4 rounded-xl border-2 text-left transition-all hover:shadow-md flex justify-between items-center",
+                                                    "p-5 rounded-xl border text-left transition-all hover:shadow-md flex justify-between items-center bg-[#FFFFFF]",
                                                     selectedService?.id === s.id
-                                                        ? "border-primary bg-secondary/50"
-                                                        : "border-gray-100 hover:border-primary/50"
+                                                        ? "border-primary ring-1 ring-primary bg-primary/5"
+                                                        : "border-gray-200 hover:border-primary/50 hover:bg-primary/5"
                                                 )}
                                             >
                                                 <div>
-                                                    <div className="font-bold text-lg text-primary">{s.name}</div>
-                                                    <div className="text-sm text-muted-foreground flex items-center gap-4 mt-1">
-                                                        <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {s.duration} min</span>
+                                                    <div className={cn("font-bold text-lg flex items-center gap-2", selectedService?.id === s.id ? "text-primary" : "text-[#333333]")}>
+                                                        {ts(`s${s.id}`)}
+                                                        {s.brand && (
+                                                            <span className={cn("text-[10px] uppercase font-bold tracking-wider text-white px-2 py-0.5 rounded-sm ml-2", selectedService?.id === s.id ? "bg-primary" : "bg-[#333333]")}>
+                                                                {s.brand}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <div className="text-sm text-gray-500 font-medium flex items-center gap-4 mt-2">
+                                                        <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {s.duration} {t("min")}</span>
                                                     </div>
                                                 </div>
-                                                <div className="text-xl font-bold text-primary">
-                                                    ${s.price}
+                                                <div className="text-xl font-bold text-[#333333]">
+                                                    €{s.price}
                                                 </div>
                                             </button>
                                         ))}
@@ -286,8 +299,8 @@ function BookingWizardContent() {
 
                         {/* Date & Time Selection (Appears after Service is selected) */}
                         {selectedService && (
-                            <div className="pt-8 border-t border-gray-100 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                                <h3 className="text-2xl font-serif font-bold text-primary mb-6">Choose Date & Time</h3>
+                            <div className="pt-8 border-t border-gray-100 animate-in fade-in slide-in-from-bottom-4 duration-500 mt-8">
+                                <h3 className="text-2xl font-serif font-bold text-[#333333] mb-6">{t("chooseDateTime")}</h3>
 
                                 {message && message.type === 'error' && !firstName && (
                                     <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm flex items-center gap-2">
@@ -297,9 +310,9 @@ function BookingWizardContent() {
                                 )}
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    <div>
-                                        <label className="block text-sm font-medium text-muted-foreground mb-2">
-                                            Select Date <span className="text-xs text-primary/60 font-normal">(Max 1 month ahead)</span>
+                                    <div className="bg-[#F5F5F5]/30 p-6 rounded-xl border border-gray-100">
+                                        <label className="block text-sm font-bold text-[#333333] mb-2">
+                                            {t("selectDate")} <span className="text-xs text-gray-500 font-normal">{t("max1Month")}</span>
                                         </label>
                                         <input
                                             type="date"
@@ -310,9 +323,9 @@ function BookingWizardContent() {
                                             className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
                                         />
                                     </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-muted-foreground mb-1">Select Time</label>
-                                        <p className="text-xs text-primary/60 mb-3 font-medium">Opening hours: 10:00 - 18:00 (Mon-Sat)</p>
+                                    <div className="bg-[#F5F5F5]/30 p-6 rounded-xl border border-gray-100">
+                                        <label className="block text-sm font-bold text-[#333333] mb-1">{t("selectTime")}</label>
+                                        <p className="text-xs text-gray-600 font-medium mb-4 tracking-tight">{t("openingHours")}</p>
                                         {!time ? (
                                             <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-[300px] overflow-y-auto p-1">
                                                 {TIME_SLOTS.map((t) => {
@@ -327,8 +340,8 @@ function BookingWizardContent() {
                                                             className={cn(
                                                                 "py-2 px-1 rounded-lg text-sm font-medium transition-all border relative",
                                                                 isSelected
-                                                                    ? "bg-primary text-white border-primary shadow-lg scale-110 ring-2 ring-offset-2 ring-primary z-10"
-                                                                    : "bg-white text-gray-700 border-gray-200 hover:border-primary/50 hover:bg-secondary/50",
+                                                                    ? "bg-primary text-primary-foreground border-primary shadow-md scale-105"
+                                                                    : "bg-white text-gray-700 border-gray-200 hover:border-primary/50 hover:bg-primary/5",
                                                                 isBooked && "bg-gray-50 text-gray-300 cursor-not-allowed line-through opacity-50 blur-[0.5px]",
                                                                 !date && "opacity-50 cursor-not-allowed"
                                                             )}
@@ -339,26 +352,26 @@ function BookingWizardContent() {
                                                 })}
                                             </div>
                                         ) : (
-                                            <div className="p-6 border rounded-xl bg-primary/5 border-primary/20 text-center animate-in fade-in zoom-in duration-300">
-                                                <p className="text-muted-foreground text-sm mb-2">Selected Time</p>
+                                            <div className="p-6 border rounded-xl bg-white border-primary/20 text-center animate-in fade-in zoom-in duration-300 shadow-sm ring-1 ring-primary/20">
+                                                <p className="text-gray-500 font-bold text-sm mb-2">{t("selectedTime")}</p>
                                                 <div className="text-3xl font-bold text-primary mb-4 font-serif">{time}</div>
                                                 <button
                                                     onClick={() => setTime("")}
-                                                    className="text-sm text-primary hover:text-primary/80 font-medium underline underline-offset-4"
+                                                    className="text-sm text-primary hover:opacity-70 font-medium underline underline-offset-4"
                                                 >
-                                                    Change Time
+                                                    {t("changeTime")}
                                                 </button>
                                             </div>
                                         )}
                                         {bookedSlots.length > 0 && (
-                                            <p className="text-xs text-red-500 mt-2 flex items-center gap-1">
+                                            <p className="text-xs text-red-500 mt-4 flex items-center gap-1">
                                                 <AlertCircle className="w-3 h-3" />
-                                                Some slots are already booked.
+                                                {t("slotsBooked")}
                                             </p>
                                         )}
                                         {!date && (
-                                            <p className="text-xs text-muted-foreground mt-2">
-                                                Please select a date first.
+                                            <p className="text-xs text-muted-foreground mt-4">
+                                                {t("selectDateFirst")}
                                             </p>
                                         )}
                                     </div>
@@ -370,9 +383,9 @@ function BookingWizardContent() {
                             <button
                                 disabled={!selectedService || !date || !time}
                                 onClick={handleNext}
-                                className="bg-white text-black px-8 py-3 rounded-full border-2 border-black disabled:opacity-50 disabled:cursor-not-allowed hover:bg-black hover:text-white transition-colors shadow-lg font-bold"
+                                className="bg-primary text-primary-foreground px-8 py-3 rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:brightness-90 transition-colors shadow-md font-bold"
                             >
-                                Confirm & Continue
+                                {t("continueToDetails")}
                             </button>
                         </div>
                     </div>
@@ -380,12 +393,12 @@ function BookingWizardContent() {
 
                 {step === 2 && (
                     <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
-                        <h3 className="text-2xl font-serif font-bold text-primary">Your Details</h3>
+                        <h3 className="text-2xl font-serif font-bold text-[#333333]">{t("yourDetails")}</h3>
 
                         <div className="space-y-4 max-w-md mx-auto">
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-muted-foreground mb-1">First Name</label>
+                                    <label className="block text-sm font-medium text-muted-foreground mb-1">{t("firstName")}</label>
                                     <div className="relative">
                                         <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                                         <input
@@ -398,7 +411,7 @@ function BookingWizardContent() {
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-muted-foreground mb-1">Last Name</label>
+                                    <label className="block text-sm font-medium text-muted-foreground mb-1">{t("lastName")}</label>
                                     <div className="relative">
                                         <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                                         <input
@@ -413,7 +426,7 @@ function BookingWizardContent() {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-muted-foreground mb-1">Email Address</label>
+                                <label className="block text-sm font-medium text-muted-foreground mb-1">{t("email")}</label>
                                 <div className="relative">
                                     <div className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>
@@ -429,7 +442,7 @@ function BookingWizardContent() {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-muted-foreground mb-1">Phone Number</label>
+                                <label className="block text-sm font-medium text-muted-foreground mb-1">{t("phone")}</label>
                                 <div className="relative">
                                     <div className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
@@ -453,12 +466,12 @@ function BookingWizardContent() {
                         </div>
 
                         <div className="sticky bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 mt-8 flex justify-between items-center -mx-8 -mb-8 rounded-b-2xl">
-                            <button onClick={() => setStep(1)} className="text-muted-foreground hover:text-primary px-4 py-2">Back</button>
+                            <button onClick={() => setStep(1)} className="text-muted-foreground hover:text-primary px-4 py-2">{t("back")}</button>
                             <button
                                 onClick={handleNext}
-                                className="bg-white text-black px-8 py-3 rounded-full border-2 border-black hover:bg-black hover:text-white transition-colors flex items-center gap-2 shadow-lg font-bold"
+                                className="bg-primary text-primary-foreground px-8 py-3 rounded-full hover:brightness-90 transition-colors flex items-center gap-2 shadow-md font-bold"
                             >
-                                Review Booking
+                                {t("reviewBooking")}
                             </button>
                         </div>
                     </div>
@@ -466,56 +479,56 @@ function BookingWizardContent() {
 
                 {step === 3 && (
                     <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
-                        <h3 className="text-2xl font-serif font-bold text-primary">Review & Confirm</h3>
+                        <h3 className="text-2xl font-serif font-bold text-[#333333]">{t("reviewConfirm")}</h3>
 
-                        <div className="bg-secondary/30 p-6 rounded-xl border border-primary/10 space-y-4">
-                            <h4 className="font-bold text-primary text-lg border-b border-primary/10 pb-2">Appointment Details</h4>
+                        <div className="bg-[#F5F5F5] p-6 rounded-xl border border-gray-200 space-y-4">
+                            <h4 className="font-bold text-[#333333] text-lg border-b border-gray-300 pb-2">{t("appointmentDetails")}</h4>
                             <div className="grid grid-cols-2 gap-4 text-sm">
                                 <div>
-                                    <span className="text-muted-foreground block">Service</span>
-                                    <span className="font-medium text-lg">{selectedService?.name}</span>
+                                    <span className="text-gray-500 block">{t("service")}</span>
+                                    <span className="font-medium text-lg text-[#333333]">{selectedService ? ts(`s${selectedService.id}`) : ""}</span>
                                 </div>
                                 <div>
-                                    <span className="text-muted-foreground block">Date & Time</span>
-                                    <span className="font-medium text-lg">{date} at {time}</span>
+                                    <span className="text-gray-500 block">{t("dateTime")}</span>
+                                    <span className="font-medium text-lg text-[#333333]">{date} at {time}</span>
                                 </div>
                                 <div>
-                                    <span className="text-muted-foreground block">Duration</span>
-                                    <span className="font-medium">{selectedService?.duration} min</span>
+                                    <span className="text-gray-500 block">{t("duration")}</span>
+                                    <span className="font-medium text-[#333333]">{selectedService?.duration} {t("min")}</span>
                                 </div>
                                 <div>
-                                    <span className="text-muted-foreground block">Price</span>
-                                    <span className="font-medium text-lg">${selectedService?.price}</span>
+                                    <span className="text-gray-500 block">{t("price")}</span>
+                                    <span className="font-medium text-lg text-[#333333]">€{selectedService?.price}</span>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="bg-white p-6 rounded-xl border border-gray-100 space-y-4">
-                            <h4 className="font-bold text-primary text-lg border-b border-gray-100 pb-2">Your Information</h4>
+                        <div className="bg-white p-6 rounded-xl border border-gray-200 space-y-4">
+                            <h4 className="font-bold text-[#333333] text-lg border-b border-gray-100 pb-2">{t("yourInformation")}</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                                 <div>
-                                    <span className="text-muted-foreground block">Name</span>
+                                    <span className="text-muted-foreground block">{t("name")}</span>
                                     <span className="font-medium">{firstName} {lastName}</span>
                                 </div>
                                 <div>
-                                    <span className="text-muted-foreground block">Email</span>
+                                    <span className="text-muted-foreground block">{t("email")}</span>
                                     <span className="font-medium">{email}</span>
                                 </div>
                                 <div>
-                                    <span className="text-muted-foreground block">Phone</span>
-                                    <span className="font-medium">{phone}</span>
+                                    <span className="text-muted-foreground block">{t("phone")}</span>
+                                    <span className="font-medium text-[#333333]">{phone}</span>
                                 </div>
                             </div>
                         </div>
 
                         <div className="sticky bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 mt-8 flex justify-between items-center -mx-8 -mb-8 rounded-b-2xl">
-                            <button onClick={() => setStep(2)} className="text-muted-foreground hover:text-primary px-4 py-2">Back</button>
+                            <button onClick={() => setStep(2)} className="text-gray-500 hover:text-primary px-4 py-2">{t("back")}</button>
                             <button
                                 disabled={isSubmitting}
                                 onClick={handleSubmit}
-                                className="bg-white text-black px-8 py-3 rounded-full border-2 border-black disabled:opacity-50 disabled:cursor-not-allowed hover:bg-black hover:text-white transition-colors flex items-center gap-2 shadow-lg shadow-primary/20 font-bold"
+                                className="bg-primary text-primary-foreground px-8 py-3 rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:brightness-90 transition-colors flex items-center gap-2 shadow-md font-bold"
                             >
-                                {isSubmitting ? "Confirming..." : "Confirm Booking"}
+                                {isSubmitting ? t("confirming") : t("confirmBooking")}
                             </button>
                         </div>
                     </div>
@@ -523,16 +536,16 @@ function BookingWizardContent() {
 
                 {step === 4 && (
                     <div className="flex flex-col items-center justify-center text-center space-y-4 animate-in zoom-in duration-300 py-10">
-                        <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-4">
+                        <div className="w-16 h-16 bg-green-50 text-green-600 rounded-full flex items-center justify-center mb-4">
                             <CheckCircle className="h-8 w-8" />
                         </div>
-                        <h3 className="text-3xl font-serif font-bold text-primary">Request Sent!</h3>
-                        <p className="text-muted-foreground max-w-md">
-                            Thank you, {firstName}. Your request for <strong>{selectedService?.name}</strong> on <strong>{date} at {time}</strong> has been received.
+                        <h3 className="text-3xl font-serif font-bold text-[#333333]">{t("requestSent")}</h3>
+                        <p className="text-gray-600 max-w-md">
+                            {t("thankYou", { firstName })} <strong className="text-primary">{selectedService ? ts(`s${selectedService.id}`) : ""}</strong> {t("on")} <strong className="text-primary">{date} at {time}</strong> {t("hasBeenReceived")}
                             <br /><br />
-                            <span className="font-medium text-primary">Status: Waiting for Confirmation</span>
+                            <span className="font-bold text-[#333333]">{t("statusWaiting")}</span>
                             <br />
-                            We will contact you shortly to confirm your appointment.
+                            {t("contactShortly")}
                         </p>
                         <button
                             onClick={() => {
@@ -547,9 +560,9 @@ function BookingWizardContent() {
                                 setPhone("");
                                 setBookedSlots([]);
                             }}
-                            className="mt-8 text-primary hover:underline"
+                            className="mt-8 text-primary font-bold hover:underline"
                         >
-                            Book Another Appointment
+                            {t("bookAnother")}
                         </button>
                     </div>
                 )}

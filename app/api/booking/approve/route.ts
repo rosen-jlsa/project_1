@@ -21,28 +21,33 @@ export async function GET(request: NextRequest) {
         return NextResponse.redirect(new URL('/booking/confirmed?mock=true', request.url));
     }
 
-    const supabaseAdmin = createAdminClient();
+    try {
+        const supabaseAdmin = createAdminClient();
 
-    // 1. Update booking status
-    const { data: booking, error: updateError } = await supabaseAdmin
-        .from('bookings')
-        .update({ status: 'confirmed' })
-        .eq('approval_token', token)
-        .select('*, services(name)')
-        .single();
+        // 1. Update booking status
+        const { data: booking, error: updateError } = await supabaseAdmin
+            .from('bookings')
+            .update({ status: 'confirmed' })
+            .eq('approval_token', token)
+            .select('*, services(name)')
+            .single();
 
-    if (updateError) {
-        console.error("Error updating booking:", updateError);
-        return NextResponse.json({ error: 'Failed to update booking' }, { status: 500 });
+        if (updateError) {
+            console.error("Error updating booking:", updateError);
+            return NextResponse.json({ error: 'Failed to update booking' }, { status: 500 });
+        }
+
+        if (!booking) {
+            return NextResponse.json({ error: 'Booking not found' }, { status: 404 });
+        }
+
+        // 2. Send confirmation email to client
+        await sendClientConfirmationEmail(booking);
+
+        // 3. Redirect to a success page
+        return NextResponse.redirect(new URL('/booking/confirmed', request.url));
+    } catch (e) {
+        console.error("Exception in approval route:", e);
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
-
-    if (!booking) {
-        return NextResponse.json({ error: 'Booking not found' }, { status: 404 });
-    }
-
-    // 2. Send confirmation email to client
-    await sendClientConfirmationEmail(booking);
-
-    // 3. Redirect to a success page
-    return NextResponse.redirect(new URL('/booking/confirmed', request.url));
 }

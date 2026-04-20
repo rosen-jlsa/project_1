@@ -17,6 +17,38 @@ export type Specialist = {
     facebook?: string;
 };
 
+export type Service = {
+    id: string;
+    name: string;
+    category: string;
+    price: number;
+    duration: number;
+    description?: string;
+    image_url?: string;
+};
+
+export type GalleryImage = {
+    id: string;
+    image_url: string;
+    caption?: string;
+};
+
+export type ProductImage = {
+    id: string;
+    image_url: string;
+    product_name: string;
+    description: string;
+};
+
+export type Review = {
+    id: string;
+    name: string;
+    rating: number;
+    comment: string;
+    date: string;
+    status?: 'pending' | 'approved' | 'rejected';
+};
+
 // Initial data to match existing hardcoded values + new fields
 // Initial data to match existing hardcoded values + new fields
 const INITIAL_DATA: Specialist[] = [
@@ -25,7 +57,7 @@ const INITIAL_DATA: Specialist[] = [
         name: "Miglena Todorova",
         role: "Pro Hair Specialist",
         bio: "The main specialist and expert in all hair treatments, cuts, and coloring.",
-        image: "/specialist-1.jpg",
+        image: "",
         phone: "+359 89 786 5829",
         instagram: "miglena_hair",
         facebook: "Megi75f"

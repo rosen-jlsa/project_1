@@ -1,0 +1,76 @@
+
+> project_1@0.1.0 lint
+> eslint
+
+
+C:\Users\RosenT\Desktop\the finnal-project_1\project_1\app\[locale]\gallery\page.tsx
+  11:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  74:45  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\RosenT\Desktop\the finnal-project_1\project_1\app\actions.ts
+   87:24  error  A `require()` style import is forbidden   @typescript-eslint/no-require-imports
+   88:26  error  A `require()` style import is forbidden   @typescript-eslint/no-require-imports
+  180:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  390:24  error  A `require()` style import is forbidden   @typescript-eslint/no-require-imports
+  391:26  error  A `require()` style import is forbidden   @typescript-eslint/no-require-imports
+
+C:\Users\RosenT\Desktop\the finnal-project_1\project_1\app\admin\gallery\page.tsx
+  10:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  42:41  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\RosenT\Desktop\the finnal-project_1\project_1\app\admin\page.tsx
+  73:25  error  Do not use an `<a>` element to navigate to `/admin/specialists/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+  79:25  error  Do not use an `<a>` element to navigate to `/admin/services/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages     @next/next/no-html-link-for-pages
+  85:25  error  Do not use an `<a>` element to navigate to `/admin/gallery/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages      @next/next/no-html-link-for-pages
+  91:25  error  Do not use an `<a>` element to navigate to `/admin/products/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages     @next/next/no-html-link-for-pages
+
+C:\Users\RosenT\Desktop\the finnal-project_1\project_1\app\admin\products\page.tsx
+  10:46  error  Unexpected any. Specify a different type                                                                                                                     @typescript-eslint/no-explicit-any
+  33:21  error  Do not use an `<a>` element to navigate to `/admin/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+  45:45  error  Unexpected any. Specify a different type                                                                                                                     @typescript-eslint/no-explicit-any
+
+C:\Users\RosenT\Desktop\the finnal-project_1\project_1\app\admin\services\page.tsx
+  36:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\RosenT\Desktop\the finnal-project_1\project_1\components\home\ProductGallery.tsx
+   3:10  warning  'getProductImages' is defined but never used  @typescript-eslint/no-unused-vars
+   8:58  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+  31:49  error    Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+
+C:\Users\RosenT\Desktop\the finnal-project_1\project_1\components\home\Reviews.tsx
+  8:18  warning  'AnimatePresence' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\RosenT\Desktop\the finnal-project_1\project_1\components\home\Services.tsx
+   3:10  warning  'getServices' is defined but never used   @typescript-eslint/no-unused-vars
+   8:52  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  12:61  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  32:48  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  33:71  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  56:70  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\RosenT\Desktop\the finnal-project_1\project_1\components\home\Specialists.tsx
+  1:21  warning  'Twitter' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\RosenT\Desktop\the finnal-project_1\project_1\components\layout\Footer.tsx
+  2:31  warning  'Twitter' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\RosenT\Desktop\the finnal-project_1\project_1\components\layout\Navbar.tsx
+  18:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\RosenT\Desktop\the finnal-project_1\project_1\components\layout\Navbar.tsx:18:9
+  16 |     // Close mobile menu on route change
+  17 |     useEffect(() => {
+> 18 |         setMobileOpen(false);
+     |         ^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  19 |     }, [pathname]);
+  20 |
+  21 |     // Prevent body scroll when menu is open  react-hooks/set-state-in-effect
+
+Γ£û 30 problems (25 errors, 5 warnings)
+

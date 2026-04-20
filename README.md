@@ -33,12 +33,25 @@ This application provides a seamless experience for clients to explore salon ser
    npm run dev
    ```
 
-## Documentation
-For a detailed list of recent changes, additions, and fixes, please refer to the **[CHANGELOG.md](./CHANGELOG.md)**.
+## Launch Readiness
+
+To ensure the project is ready for production, follow the Launch Checklist:
+
+### 1. Verification Script
+We have included a specialized script that automatically checks linting and build health. Run this before every deployment:
+```powershell
+./verify-launch.ps1
+```
+
+### 2. GitHub Synchronization
+Ensure the latest stable version is on GitHub using the "Full Launch Fix" naming convention.
+
+### 3. Environment Variables
+Verify that `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are correctly set in your production environment.
 
 ## Technical Stack
 - **Framework**: Next.js 16 (App Router)
-- **Styling**: Tailwind CSS & Animate.css
+- **Styling**: Tailwind CSS & Framer Motion
 - **Database**: Supabase (with Local Mock fallback)
 - **Icons**: Lucide React
 - **Maps**: React Leaflet

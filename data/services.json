@@ -3,48 +3,140 @@
     "id": "1",
     "name": "Women's Haircut",
     "category": "Women",
-    "price": 50,
-    "duration": 60,
+    "price": "30",
+    "duration": "45",
     "specialistIds": ["1"]
   },
   {
     "id": "2",
-    "name": "Men's Haircut",
-    "category": "Men",
-    "price": 30,
-    "duration": 30,
+    "name": "Women's Haircut + Wash & Blow-dry",
+    "category": "Women",
+    "price": "40",
+    "duration": "60",
     "specialistIds": ["1"]
   },
   {
     "id": "3",
-    "name": "Child's Haircut",
-    "category": "Children",
-    "price": 25,
-    "duration": 30,
+    "name": "Hair Coloring (Short/Medium/Long)",
+    "category": "Women",
+    "price": "50-80",
+    "duration": "90",
+    "icon": "placeholder_hair_dye",
     "specialistIds": ["1"]
   },
   {
     "id": "4",
-    "name": "Hair Coloring",
+    "name": "Coloring with Client's Product",
     "category": "Women",
-    "price": 120,
-    "duration": 120,
+    "price": "30",
+    "duration": "60",
     "specialistIds": ["1"]
   },
   {
     "id": "5",
-    "name": "Blow Dry & Styling",
+    "name": "Ombre / Highlights (Cap/Foil) / Lightening",
     "category": "Women",
-    "price": 40,
-    "duration": 45,
+    "price": "70-120",
+    "duration": "120",
+    "specialistIds": ["1"]
+  },
+  {
+    "id": "6",
+    "name": "Blow-dry & Styling (Short/Medium/Long)",
+    "category": "Women",
+    "price": "25-45",
+    "duration": "45",
+    "specialistIds": ["1"]
+  },
+  {
+    "id": "7",
+    "name": "Formal / Sporty-Elegant Updo",
+    "category": "Women",
+    "price": "50-100",
+    "duration": "90",
+    "specialistIds": ["1"]
+  },
+  {
+    "id": "8",
+    "name": "Men's Haircut",
+    "category": "Men",
+    "price": "20",
+    "duration": "30",
+    "specialistIds": ["1"]
+  },
+  {
+    "id": "9",
+    "name": "Men's Haircut + Wash",
+    "category": "Men",
+    "price": "25",
+    "duration": "40",
+    "specialistIds": ["1"]
+  },
+  {
+    "id": "10",
+    "name": "Child's Haircut",
+    "category": "Children",
+    "price": "15",
+    "duration": "30",
+    "specialistIds": ["1"]
+  },
+  {
+    "id": "11",
+    "name": "Ear Piercing (Studex75 + Earrings)",
+    "category": "Piercing",
+    "price": "35",
+    "duration": "15",
+    "brand": "Studex",
+    "specialistIds": ["1"]
+  },
+  {
+    "id": "12",
+    "name": "Nose Piercing (Studex75 + Earring)",
+    "category": "Piercing",
+    "price": "40",
+    "duration": "15",
+    "brand": "Studex",
+    "specialistIds": ["1"]
+  },
+  {
+    "id": "13",
+    "name": "Laminating Hair Therapy (Joico Styler)",
+    "category": "Women Therapies",
+    "price": "60",
+    "duration": "60",
+    "brand": "Joico",
     "specialistIds": ["1"]
   },
   {
     "id": "14",
-    "name": "Ear Piercing",
-    "category": "Piercing",
-    "price": 35,
-    "duration": 15,
+    "name": "Restorative Therapy (Keratin & Goji Berry)",
+    "category": "Women Therapies",
+    "price": "50",
+    "duration": "50",
+    "specialistIds": ["1"]
+  },
+  {
+    "id": "15",
+    "name": "Intensive Multifunctional Therapy (Argan & Panthenol)",
+    "category": "Women Therapies",
+    "price": "55",
+    "duration": "50",
+    "specialistIds": ["1"]
+  },
+  {
+    "id": "16",
+    "name": "Hydrating Therapy (Ampoule + Blow-dry)",
+    "category": "Women Therapies",
+    "price": "45",
+    "duration": "45",
+    "specialistIds": ["1"]
+  },
+  {
+    "id": "17",
+    "name": "Botox Hair Therapy (Collagen & Hyaluronic)",
+    "category": "Women Therapies",
+    "price": "70",
+    "duration": "60",
     "specialistIds": ["1"]
   }
 ]

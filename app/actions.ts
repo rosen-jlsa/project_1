@@ -1,11 +1,14 @@
 "use server";
 
+import fs from "fs";
+import path from "path";
 import { createSessionClient, isSupabaseConfigured } from "@/lib/supabase";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import {
     getLocalSpecialists, saveLocalSpecialist, deleteLocalSpecialist, Specialist,
-    getLocalBookings, saveLocalBooking, updateLocalBookingStatus, Booking
+    getLocalBookings, saveLocalBooking, updateLocalBookingStatus, Booking,
+    Service, GalleryImage
 } from "@/lib/data";
 import { sendAdminApprovalEmail } from "@/lib/email";
 
@@ -84,12 +87,10 @@ export async function logoutAdmin() {
 export async function getServices() {
     if (!isSupabaseConfigured) {
         try {
-            const fs = require('fs');
-            const path = require('path');
             const servicesPath = path.join(process.cwd(), 'data', 'services.json');
             if (fs.existsSync(servicesPath)) {
                 const data = fs.readFileSync(servicesPath, 'utf8');
-                return JSON.parse(data);
+                return JSON.parse(data) as Service[];
             }
         } catch (e) {
             console.error("Failed to read local services", e);
@@ -177,7 +178,7 @@ export async function createBooking(prevState: ActionState | null, formData: For
     // Send admin approval email
     if (newBooking) {
         const services = await getServices();
-        const serviceName = services.find((s: any) => s.id === newBooking.service_id)?.name || "Unknown Service";
+        const serviceName = services.find((s: Service) => s.id === newBooking.service_id)?.name || "Unknown Service";
 
         // Construct approval link
         // This should be based on your deployment URL
@@ -387,12 +388,10 @@ export async function removeSpecialist(id: string) {
 export async function getGalleryImages() {
     if (!isSupabaseConfigured) {
         try {
-            const fs = require('fs');
-            const path = require('path');
             const galleryPath = path.join(process.cwd(), 'data', 'gallery.json');
             if (fs.existsSync(galleryPath)) {
                 const data = fs.readFileSync(galleryPath, 'utf8');
-                return JSON.parse(data);
+                return JSON.parse(data) as GalleryImage[];
             }
         } catch (e) {
             console.error("Failed to read local gallery data", e);
@@ -417,4 +416,47 @@ export async function getGalleryImages() {
         return [];
     }
     return data;
+}
+
+export async function getProductImages() {
+    if (!isSupabaseConfigured) {
+        return [
+            { id: "1", image_url: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=800&auto=format&fit=crop", product_name: "Luxury Keratin Treatment", description: "Infused with organic oils for supreme smoothness." },
+            { id: "2", image_url: "https://images.unsplash.com/photo-1599305090598-fe179d501227?q=80&w=800&auto=format&fit=crop", product_name: "Premium Hair Mask", description: "Deep hydration for colored and treated hair." },
+            { id: "3", image_url: "https://images.unsplash.com/photo-1580927752452-89d86da3fa0a?q=80&w=800&auto=format&fit=crop", product_name: "Gold Elixir Oil", description: "Provides a glossy finish and protects from heat." }
+        ];
+    }
+    const supabase = await createSessionClient();
+    const { data, error } = await supabase.from("product_images").select("*").order("created_at", { ascending: false });
+    if (error) return [];
+    return data;
+}
+
+export async function addProductImage(imageUrl: string, productName: string, description: string) {
+    if (!await checkAdminSession()) return { success: false, message: "Unauthorized" };
+    if (!isSupabaseConfigured) return { success: true, message: "Added (Mock)" };
+
+    const supabase = await createSessionClient();
+    const { error } = await supabase.from("product_images").insert({
+        image_url: imageUrl,
+        product_name: productName,
+        description: description
+    });
+    
+    if (error) return { success: false, message: error.message };
+    revalidatePath("/");
+    revalidatePath("/admin/products");
+    return { success: true, message: "Product added" };
+}
+
+export async function deleteProductImage(id: string) {
+    if (!await checkAdminSession()) return { success: false, message: "Unauthorized" };
+    if (!isSupabaseConfigured) return { success: true, message: "Deleted (Mock)" };
+
+    const supabase = await createSessionClient();
+    const { error } = await supabase.from("product_images").delete().eq("id", id);
+    if (error) return { success: false, message: error.message };
+    revalidatePath("/");
+    revalidatePath("/admin/products");
+    return { success: true, message: "Product deleted" };
 }

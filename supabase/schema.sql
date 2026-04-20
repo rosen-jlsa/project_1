@@ -144,3 +144,23 @@ VALUES (
     'Hairdresser',
     'miglena.todorova75@gmail.com'
   );
+
+-- Create Product Images Table
+CREATE TABLE product_images (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  image_url TEXT NOT NULL,
+  product_name TEXT NOT NULL,
+  description TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+ALTER TABLE product_images ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public read product_images" ON product_images FOR
+SELECT TO anon, authenticated USING (true);
+
+CREATE POLICY "Admins manage product_images" ON product_images FOR ALL TO authenticated USING (
+  EXISTS (
+    SELECT 1 FROM user_roles WHERE user_id = auth.uid() AND role IN ('sysadmin', 'moderator')
+  )
+);

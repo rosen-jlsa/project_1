@@ -15,33 +15,97 @@
 
 @layer base {
   :root {
-    --background: #F0FFF0;
-    /* Honeydew */
-    --foreground: #1a1a1a;
+    --background: #F0EBE3;
+    /* Warm Milky Granite Base */
+    --foreground: #1A1A1A;
+    /* Deep Black for contrast */
 
-    /* Deep Purple */
-    --primary: #5F4A8B;
-    --primary-foreground: #ffffff;
+    /* Milky Pink Accent */
+    --primary: #F3D1D9;
+    --primary-foreground: #2D2D2D;
 
-    /* Honeydew (Secondary/Background) */
-    --secondary: #F0FFF0;
-    --secondary-foreground: #5F4A8B;
+    /* Light Milky Pink (Section backgrounds) */
+    --secondary: #F8E1E7;
+    --secondary-foreground: #F3D1D9;
 
-    /* Russet */
-    --accent: #7B4B3A;
-    --accent-foreground: #ffffff;
+    /* Black Accent */
+    --accent: #000000;
+    --accent-foreground: #F3D1D9;
 
-    --muted: #f5f5f5;
-    --muted-foreground: #737373;
+    --muted: #D8D0C8;
+    --muted-foreground: #1F2937;
 
     --radius: 0.5rem;
   }
 
   body {
-    color: var(--foreground);
-    background: var(--background);
+    @apply text-foreground bg-background;
     font-family: Arial, Helvetica, sans-serif;
+    position: relative;
   }
+
+  /* Granite texture overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(243,209,217,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(248,225,231,0.06) 0%, transparent 50%),
+      radial-gradient(circle at 40% 80%, rgba(216,208,200,0.1) 0%, transparent 40%),
+      repeating-conic-gradient(rgba(0,0,0,0.01) 0% 25%, transparent 0% 50%) 0 0 / 60px 60px,
+      repeating-conic-gradient(rgba(0,0,0,0.008) 0% 25%, transparent 0% 50%) 30px 30px / 60px 60px,
+      linear-gradient(135deg, #F0EBE3 0%, #EDE7DF 25%, #F0EBE3 50%, #ECE6DD 75%, #F0EBE3 100%);
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-black;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.12);
+  }
+}
+
+@layer utilities {
+  .laser-text {
+    @apply text-black;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15), 0 0 1px rgba(0, 0, 0, 0.05);
+  }
+
+  .laser-text-gray {
+    @apply text-gray-800;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-premium {
+    @apply transition-all duration-300 transform hover:scale-105 active:scale-95;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  .btn-premium:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-premium {
+  animation: fadeInScale 0.6s ease-out forwards;
+}
+
+button, .button {
+  @apply transition-all duration-200 cursor-pointer;
+}
+
+button:hover, .button:hover {
+  @apply brightness-105;
 }
 
 html {
