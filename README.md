@@ -56,3 +56,19 @@ Verify that `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are c
 - **Icons**: Lucide React
 - **Maps**: React Leaflet
 
+## Frequently Asked Questions
+
+### What is the `node_modules` folder?
+Think of the `node_modules` folder as a **Toolbox**.
+When you build a house, you don't make your own hammers, saws, or drills from scratch; you buy them from a store and put them in your toolbox.
+In programming, `node_modules` contains all the "tools" (libraries and code) that other people wrote, which our app needs to work (like the "hammer" for connecting to the database or the "drill" for showing icons).
+
+**Note:** You usually don't see this folder on GitHub because it's very heavy. You "build" your toolbox locally by running `npm install`.
+
+### Why is the app not connecting to the backend?
+If your app is running in "Mock Mode" (using local files instead of your database), it means the connection "bridge" isn't set up yet. To fix this:
+
+1. Create a file named `.env` in the root folder.
+2. Copy the contents from `.env.example` into your new `.env` file.
+3. Replace the placeholder values with your actual **Supabase** credentials.
+4. Restart your development server (`npm run dev`).
