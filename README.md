@@ -56,3 +56,16 @@ Verify that `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are c
 - **Icons**: Lucide React
 - **Maps**: React Leaflet
 
+## Frequently Asked Questions (FAQ)
+
+### What is the `node_modules` folder?
+Think of the `node_modules` folder as a **"Toolbox"**.
+- To build and run this app, we need many different tools (called "packages" or "libraries") that other people have already written.
+- When you run `npm install`, it downloads all these tools and puts them into the `node_modules` folder.
+- The app uses these tools to do things like connecting to the database, showing icons, or creating the website structure.
+
+### Why is the backend not connecting?
+If the app isn't connecting to the backend (Supabase), it's likely because the **environment variables** are missing.
+- You need to create a file named `.env` or `.env.local` in the root folder.
+- Copy the contents from `.env.example` into your new `.env` file.
+- Replace the placeholder values with your actual Supabase credentials.
