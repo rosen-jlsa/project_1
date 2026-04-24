@@ -56,3 +56,13 @@ Verify that `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are c
 - **Icons**: Lucide React
 - **Maps**: React Leaflet
 
+## Frequently Asked Questions (FAQ)
+
+### 1. What is the `node_modules` folder?
+Think of `node_modules` as a **toolbox**. When we build a house (the app), we don't make our own hammers, saws, or screwdrivers from scratch. Instead, we use a toolbox filled with ready-made tools. In programming, these tools are called "packages." When you run `npm install`, you are downloading all the tools the app needs to work.
+
+### 2. Why is `node_modules` not in the GitHub repository?
+The toolbox is very heavy (it contains thousands of files). Since we have a list of all the tools needed in `package.json`, we don't need to carry the heavy toolbox around. Anyone who gets the project can simply run `npm install` to get their own copy of the tools. This keeps the project light and easy to share.
+
+### 3. How does the app connect to the backend?
+The app connects to the backend (Supabase) using special keys called **Environment Variables**. These are stored in a file named `.env`. If these keys are missing, the app will automatically switch to **Mock Mode**, using local data stored in the `data/` folder instead of a live database. This allows the app to work even without an internet connection to the database.
