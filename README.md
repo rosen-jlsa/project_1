@@ -47,7 +47,19 @@ We have included a specialized script that automatically checks linting and buil
 Ensure the latest stable version is on GitHub using the "Full Launch Fix" naming convention.
 
 ### 3. Environment Variables
-Verify that `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are correctly set in your production environment.
+Verify that `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are correctly set in your production environment. Use `.env.example` as a template for your `.env` file.
+
+## Project Structure Notes
+
+### What is the `node_modules` folder?
+In simple words, `node_modules` is like a **toolbox** for your project. It contains all the external code, libraries, and tools (like React, Supabase, etc.) that your project needs to run.
+
+- You **should not** manually edit files in this folder.
+- If the folder is missing, you can recreate it by running `npm install`.
+- It is ignored by Git because it can be very large and is automatically generated.
+
+### Backend Connectivity
+The project uses environment variables (stored in a `.env` file) to connect to the backend (Supabase). If these are missing, the app will run in "Mock Mode" using local files in the `data/` folder. To connect to a real backend, create a `.env` file based on `.env.example`.
 
 ## Technical Stack
 - **Framework**: Next.js 16 (App Router)
