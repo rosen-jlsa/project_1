@@ -27,6 +27,8 @@ This application provides a seamless experience for clients to explore salon ser
    ```bash
    npm install
    ```
+   > **Note on `node_modules`**: This command creates a folder called `node_modules`. Think of this folder as a **toolbox** for the project. It contains all the external libraries (like Supabase and Next.js) that the application needs to run and talk to the backend. You don't need to edit anything inside it!
+
 3. Configure environment variables (see `.env.example`).
 4. Launch development server:
    ```bash
