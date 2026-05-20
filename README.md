@@ -27,6 +27,8 @@ This application provides a seamless experience for clients to explore salon ser
    ```bash
    npm install
    ```
+   *Note: This command creates the `node_modules` folder, which acts like a "toolbox" containing all the external libraries (dependencies) the application needs to function and communicate with the backend.*
+
 3. Configure environment variables (see `.env.example`).
 4. Launch development server:
    ```bash
