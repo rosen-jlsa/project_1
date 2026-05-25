@@ -27,8 +27,15 @@ This application provides a seamless experience for clients to explore salon ser
    ```bash
    npm install
    ```
-   *Note: This creates the `node_modules` folder, which acts as a "toolbox" containing all the external libraries the app needs to function and connect to the backend.*
-3. Configure environment variables (see `.env.example`).
+
+   ### 💡 What is the `node_modules` folder?
+   In simple words, `node_modules` is the **Project's Toolbox**.
+   - It contains all the pre-made tools (libraries) that the app needs to run, like the code for animations, icons, and the database connection.
+   - You don't write the code inside this folder; it is automatically filled when you run `npm install`.
+   - **Connection to Backend:** This folder contains the "connector" (Supabase client) that allows the app to talk to your database. Without this folder, the app cannot find the tools to connect to the backend.
+
+3. Configure environment variables:
+   Copy `.env.example` to a new file named `.env` and fill in your Supabase credentials.
 4. Launch development server:
    ```bash
    npm run dev
