@@ -16,6 +16,7 @@ export function SpecialistForm({ initialData, onClose }: Props) {
             role: "",
             bio: "",
             image: "",
+            email: "",
             phone: "",
             instagram: "",
             twitter: "",
@@ -34,6 +35,7 @@ export function SpecialistForm({ initialData, onClose }: Props) {
             role: formData.role || "",
             bio: formData.bio || "",
             image: formData.image || "",
+            email: formData.email || "",
             phone: formData.phone || undefined,
             instagram: formData.instagram || undefined,
             twitter: formData.twitter || undefined,
@@ -86,14 +88,27 @@ export function SpecialistForm({ initialData, onClose }: Props) {
                 />
             </div>
 
-            <div className="space-y-2">
-                <label className="text-sm font-medium">Image URL</label>
-                <input
-                    className="w-full p-2 border rounded-lg"
-                    value={formData.image}
-                    onChange={e => setFormData({ ...formData, image: e.target.value })}
-                    placeholder="/path/to/image.jpg"
-                />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                    <label className="text-sm font-medium">Email</label>
+                    <input
+                        required
+                        type="email"
+                        className="w-full p-2 border rounded-lg"
+                        value={formData.email}
+                        onChange={e => setFormData({ ...formData, email: e.target.value })}
+                        placeholder="specialist@example.com"
+                    />
+                </div>
+                <div className="space-y-2">
+                    <label className="text-sm font-medium">Image URL</label>
+                    <input
+                        className="w-full p-2 border rounded-lg"
+                        value={formData.image}
+                        onChange={e => setFormData({ ...formData, image: e.target.value })}
+                        placeholder="/path/to/image.jpg"
+                    />
+                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
