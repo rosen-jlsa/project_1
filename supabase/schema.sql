@@ -3,8 +3,13 @@ CREATE TABLE specialists (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL,
   role TEXT NOT NULL,
-  -- 'Hairdresser', 'Beautician', 'Manicurist'
   email TEXT NOT NULL,
+  bio TEXT,
+  image TEXT,
+  phone TEXT,
+  instagram TEXT,
+  twitter TEXT,
+  facebook TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 -- Create Bookings Table
@@ -66,7 +71,6 @@ CREATE POLICY "Sysadmins manage roles" ON user_roles FOR ALL TO authenticated US
   EXISTS (
     SELECT 1
     FROM user_roles
-    WHERE user_id = auth.uid()
     WHERE user_id = auth.uid()
       AND role = 'sysadmin'
   )
