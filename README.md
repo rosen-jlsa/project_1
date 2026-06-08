@@ -16,23 +16,33 @@ This application provides a seamless experience for clients to explore salon ser
 
 ### Prerequisites
 - **Node.js**: 18.x or higher
-- **Directory**: All commands should be run from within the `project_1/` folder.
+- **Directory**: All commands should be run from within the root project folder.
 
 ### Setup & Run
-1. Navigate to the project folder:
-   ```bash
-   cd project_1
-   ```
-2. Install dependencies:
+1. **Install dependencies**:
    ```bash
    npm install
    ```
-   *Note: This creates the `node_modules` folder, which acts as a "toolbox" containing all the external libraries the app needs to function and connect to the backend.*
-3. Configure environment variables (see `.env.example`).
-4. Launch development server:
+   *Note: This creates the `node_modules` folder. Think of this folder as a "toolbox" or "library" that contains all the external code (packages) the app needs to function, such as React, Next.js, and the Supabase connector. Without this folder, the app cannot run because it wouldn't have its tools.*
+
+2. **Configure environment variables**:
+   To connect the app to the backend (Supabase) and other services, you need to set up your environment variables:
+   - Copy the `.env.example` file and rename it to `.env`.
+   - Open `.env` and fill in your actual credentials (URL and Keys).
+   - If these are missing, the app will run in "Mock Mode" using local JSON files in the `data/` folder.
+
+3. **Launch development server**:
    ```bash
    npm run dev
    ```
+
+## Connecting to the Backend (Supabase)
+
+The app is designed to work with Supabase for real-time data and authentication. To fix a "not connected" problem:
+1. Ensure you have a Supabase project created.
+2. Get your `Project URL` and `Anon Key` from the Supabase Dashboard (Settings > API).
+3. Ensure these are correctly entered in your `.env` file as `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+4. Restart your development server after making changes to the `.env` file.
 
 ## Launch Readiness
 
@@ -56,4 +66,3 @@ Verify that `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are c
 - **Database**: Supabase (with Local Mock fallback)
 - **Icons**: Lucide React
 - **Maps**: React Leaflet
-
