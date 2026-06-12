@@ -27,8 +27,12 @@ This application provides a seamless experience for clients to explore salon ser
    ```bash
    npm install
    ```
-   *Note: This creates the `node_modules` folder, which acts as a "toolbox" containing all the external libraries the app needs to function and connect to the backend.*
-3. Configure environment variables (see `.env.example`).
+   *Note: This creates the `node_modules` folder, which acts as a "toolbox" containing all the external libraries (modules) the app needs to function. It is essential for the app to run but is usually not uploaded to GitHub because it's very large and can be recreated anytime with `npm install`.*
+3. **Connect the Backend**:
+   - Create a new file named `.env` in the root directory.
+   - Copy the contents from `.env.example` into your new `.env` file.
+   - Fill in your actual Supabase and Resend credentials.
+   - *Without this step, the app will run in "Mock Mode" using local JSON files.*
 4. Launch development server:
    ```bash
    npm run dev
