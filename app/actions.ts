@@ -366,8 +366,30 @@ export async function saveSpecialist(data: Specialist) {
         return { success: true, message: "Specialist saved successfully" };
     }
 
-    // Future: Supabase save
-    return { success: false, message: "Database not connected" };
+    const supabase = await createSessionClient();
+    const { error } = await supabase
+        .from("specialists")
+        .upsert({
+            id: data.id || undefined,
+            name: data.name,
+            role: data.role,
+            bio: data.bio,
+            image: data.image,
+            email: data.email,
+            phone: data.phone,
+            instagram: data.instagram,
+            twitter: data.twitter,
+            facebook: data.facebook
+        });
+
+    if (error) {
+        console.error("Error saving specialist:", error);
+        return { success: false, message: error.message };
+    }
+
+    revalidatePath("/");
+    revalidatePath("/admin/specialists");
+    return { success: true, message: "Specialist saved successfully" };
 }
 
 export async function removeSpecialist(id: string) {
@@ -382,7 +404,20 @@ export async function removeSpecialist(id: string) {
         return { success: true, message: "Specialist removed" };
     }
 
-    return { success: false, message: "Database not connected" };
+    const supabase = await createSessionClient();
+    const { error } = await supabase
+        .from("specialists")
+        .delete()
+        .eq("id", id);
+
+    if (error) {
+        console.error("Error removing specialist:", error);
+        return { success: false, message: error.message };
+    }
+
+    revalidatePath("/");
+    revalidatePath("/admin/specialists");
+    return { success: true, message: "Specialist removed" };
 }
 
 export async function getGalleryImages() {
