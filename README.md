@@ -27,8 +27,10 @@ This application provides a seamless experience for clients to explore salon ser
    ```bash
    npm install
    ```
-   *Note: This creates the `node_modules` folder, which acts as a "toolbox" containing all the external libraries the app needs to function and connect to the backend.*
-3. Configure environment variables (see `.env.example`).
+   *Note: This creates the `node_modules` folder. Think of it as a **"toolbox"** that contains all the external tools and libraries (like Supabase, React, and Tailwind) that the app needs to run.*
+
+3. **Fix Backend Connection**:
+   The app needs to know where your database is. You fix this by creating a file named `.env` in the root folder and filling it with your keys from `.env.example`.
 4. Launch development server:
    ```bash
    npm run dev
