@@ -50,6 +50,22 @@ Ensure the latest stable version is on GitHub using the "Full Launch Fix" naming
 ### 3. Environment Variables
 Verify that `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are correctly set in your production environment.
 
+## Project Structure & Backend Setup
+
+### What is the `node_modules` folder?
+In simple words, `node_modules` is the **toolbox** of your project.
+- It contains all the libraries and code (like React, Tailwind, or Supabase) that other developers wrote and your project needs to work.
+- You don't write code here. When you run `npm install`, these "tools" are downloaded automatically into this folder.
+- It is excluded from the repository (via `.gitignore`) because it's very large, but anyone can recreate it by running `npm install`.
+
+### Connecting to the Backend (Supabase)
+The app uses **Supabase** as its backend. If the connection is not "fixed," the app runs in **Mock Mode** using local files in the `data/` folder.
+
+To connect your project to a live backend:
+1. Create a file named `.env` in the root directory.
+2. Copy the contents of `.env.example` into your new `.env` file.
+3. Replace the placeholder values with your actual keys from the Supabase dashboard.
+
 ## Technical Stack
 - **Framework**: Next.js 16 (App Router)
 - **Styling**: Tailwind CSS & Framer Motion
