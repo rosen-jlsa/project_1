@@ -4,7 +4,13 @@ CREATE TABLE specialists (
   name TEXT NOT NULL,
   role TEXT NOT NULL,
   -- 'Hairdresser', 'Beautician', 'Manicurist'
-  email TEXT NOT NULL,
+  bio TEXT,
+  image TEXT,
+  email TEXT,
+  phone TEXT,
+  instagram TEXT,
+  twitter TEXT,
+  facebook TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 -- Create Bookings Table
@@ -66,7 +72,6 @@ CREATE POLICY "Sysadmins manage roles" ON user_roles FOR ALL TO authenticated US
   EXISTS (
     SELECT 1
     FROM user_roles
-    WHERE user_id = auth.uid()
     WHERE user_id = auth.uid()
       AND role = 'sysadmin'
   )
@@ -138,11 +143,15 @@ UPDATE TO authenticated USING (
     )
   );
 -- Insert Mock Data (Only for local dev validation if needed)
-INSERT INTO specialists (name, role, email)
+INSERT INTO specialists (name, role, bio, email, phone, instagram, facebook)
 VALUES (
     'Miglena Todorova',
-    'Hairdresser',
-    'miglena.todorova75@gmail.com'
+    'Pro Hair Specialist',
+    'The main specialist and expert in all hair treatments, cuts, and coloring.',
+    'miglena.todorova75@gmail.com',
+    '+359 89 786 5829',
+    'miglena_hair',
+    'Megi75f'
   );
 
 -- Create Product Images Table

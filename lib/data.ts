@@ -11,6 +11,7 @@ export type Specialist = {
     role: string;
     bio: string;
     image: string;
+    email?: string;
     phone?: string;
     instagram?: string;
     twitter?: string;
