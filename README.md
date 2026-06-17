@@ -57,3 +57,16 @@ Verify that `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are c
 - **Icons**: Lucide React
 - **Maps**: React Leaflet
 
+## FAQ
+
+### What is the `node_modules` folder?
+Think of the `node_modules` folder as a **Toolbox**.
+When we build an app, we don't write every single piece of code from scratch. Instead, we use "tools" or "parts" created by other people (called packages).
+- When you run `npm install`, it's like going to the store and filling your toolbox with all the specific tools this app needs to work.
+- The folder is usually very large, so we don't share it directly. Everyone who gets the project runs `npm install` to get their own copy of the tools.
+
+### How do I fix the back-end connection?
+The app uses "Mock Mode" when it can't find your database keys. To connect the real back-end:
+1. Create a file named `.env` in the root folder.
+2. Copy the contents of `.env.example` into it.
+3. Replace the placeholder values with your actual keys from Supabase and Resend.
