@@ -14,6 +14,7 @@ export function SpecialistForm({ initialData, onClose }: Props) {
         initialData || {
             name: "",
             role: "",
+            email: "",
             bio: "",
             image: "",
             phone: "",
@@ -32,6 +33,7 @@ export function SpecialistForm({ initialData, onClose }: Props) {
             id: initialData?.id || crypto.randomUUID(),
             name: formData.name || "",
             role: formData.role || "",
+            email: formData.email || "",
             bio: formData.bio || "",
             image: formData.image || "",
             phone: formData.phone || undefined,
@@ -71,6 +73,17 @@ export function SpecialistForm({ initialData, onClose }: Props) {
                         value={formData.role}
                         onChange={e => setFormData({ ...formData, role: e.target.value })}
                         placeholder="Senior Stylist"
+                    />
+                </div>
+                <div className="space-y-2">
+                    <label className="text-sm font-medium">Email</label>
+                    <input
+                        required
+                        type="email"
+                        className="w-full p-2 border rounded-lg"
+                        value={formData.email}
+                        onChange={e => setFormData({ ...formData, email: e.target.value })}
+                        placeholder="specialist@example.com"
                     />
                 </div>
             </div>
