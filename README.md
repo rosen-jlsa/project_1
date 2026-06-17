@@ -57,3 +57,18 @@ Verify that `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are c
 - **Icons**: Lucide React
 - **Maps**: React Leaflet
 
+## Frequently Asked Questions
+
+### What is the `node_modules` folder?
+The `node_modules` folder is like a **library of pre-built tools** for your project.
+- Your project needs special tools (like React or Supabase) to work.
+- Instead of writing every single line of code yourself, you "borrow" these tools from other developers.
+- When you run `npm install`, these tools are downloaded into this folder.
+- **Note:** You should never edit files inside `node_modules` directly, and you don't need to upload this folder to GitHub.
+
+### Why is the project "not connected" to the back-end?
+The `node_modules` folder provides the *code* to connect, but it doesn't know *where* to go. To connect to your real back-end (Supabase), you need to provide the **address and keys**.
+1. Create a file named `.env` in the root folder.
+2. Copy the content from `.env.example` into your new `.env` file.
+3. Fill in your actual Supabase URL and Keys.
+4. If these are missing, the app will run in **Mock Mode** using local files in the `data/` folder.
