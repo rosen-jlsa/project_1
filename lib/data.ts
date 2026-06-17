@@ -9,6 +9,7 @@ export type Specialist = {
     id: string;
     name: string;
     role: string;
+    email: string;
     bio: string;
     image: string;
     phone?: string;
@@ -56,6 +57,7 @@ const INITIAL_DATA: Specialist[] = [
         id: "1",
         name: "Miglena Todorova",
         role: "Pro Hair Specialist",
+        email: "miglena.todorova75@gmail.com",
         bio: "The main specialist and expert in all hair treatments, cuts, and coloring.",
         image: "",
         phone: "+359 89 786 5829",
