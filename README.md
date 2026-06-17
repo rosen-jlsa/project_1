@@ -18,6 +18,13 @@ This application provides a seamless experience for clients to explore salon ser
 - **Node.js**: 18.x or higher
 - **Directory**: All commands should be run from within the `project_1/` folder.
 
+### Project Structure FAQ
+**What is the `node_modules` folder?**
+Think of `node_modules` as a **Toolbox**. It contains all the pre-written code and libraries (called dependencies) that the project needs to work.
+- You don't need to touch this folder.
+- It is created automatically when you run `npm install`.
+- It is excluded from the source code (via `.gitignore`) because it can be very large and can be rebuilt anytime from the `package.json` file.
+
 ### Setup & Run
 1. Navigate to the project folder:
    ```bash
