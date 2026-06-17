@@ -57,3 +57,18 @@ Verify that `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are c
 - **Icons**: Lucide React
 - **Maps**: React Leaflet
 
+## Frequently Asked Questions (FAQ)
+
+### What is the `node_modules` folder?
+Think of the `node_modules` folder as a **Toolbox**.
+- To build this application, we use many pre-made tools (dependencies) created by the developer community.
+- When you run `npm install`, all these tools are downloaded and placed into the `node_modules` folder.
+- The application needs this folder to run correctly, but you should never edit the files inside it directly.
+
+### Why is the app not "connected" to the back-end?
+The project is designed to be flexible. If it doesn't find the "Keys" (credentials) for the real database, it automatically switches to **Mock Mode** using local files in the `data/` folder.
+
+To connect to your own back-end (Supabase):
+1. Rename the `.env.example` file to `.env`.
+2. Fill in your credentials (`NEXT_PUBLIC_SUPABASE_URL`, etc.).
+3. Restart the development server.
