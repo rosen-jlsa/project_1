@@ -27,8 +27,15 @@ This application provides a seamless experience for clients to explore salon ser
    ```bash
    npm install
    ```
-   *Note: This creates the `node_modules` folder, which acts as a "toolbox" containing all the external libraries the app needs to function and connect to the backend.*
 3. Configure environment variables (see `.env.example`).
+
+## What is the `node_modules` folder?
+
+Think of the `node_modules` folder as a **Big Toolbox**.
+
+* **Why is it here?** When we build a website, we don't write every single piece of code from scratch. Instead, we use "tools" or "parts" made by other people (called libraries). All these tools are stored in the `node_modules` folder.
+* **What does it do for the Backend?** One of the most important tools in this folder is the one that allows our app to "talk" to the database (the backend). Without this folder, the app wouldn't have the "phone" it needs to call the database and save your bookings!
+* **How to fix connection problems?** If your app isn't connecting to the backend, it usually means the "toolbox" is missing or the "address" (the `.env` file) is wrong. Running `npm install` fixes the toolbox, and filling out the `.env` file gives the app the right address to call.
 4. Launch development server:
    ```bash
    npm run dev
