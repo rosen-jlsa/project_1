@@ -27,8 +27,8 @@ This application provides a seamless experience for clients to explore salon ser
    ```bash
    npm install
    ```
-   *Note: This creates the `node_modules` folder, which acts as a "toolbox" containing all the external libraries the app needs to function and connect to the backend.*
-3. Configure environment variables (see `.env.example`).
+   *Note: This creates the `node_modules` folder. See the section below for a simple explanation.*
+3. Configure environment variables (copy `.env.example` to a new file named `.env` and fill in the values).
 4. Launch development server:
    ```bash
    npm run dev
@@ -49,6 +49,16 @@ Ensure the latest stable version is on GitHub using the "Full Launch Fix" naming
 
 ### 3. Environment Variables
 Verify that `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are correctly set in your production environment.
+
+## 💡 Simple Explanation: What is `node_modules`?
+
+Think of your project like a **hair salon**:
+- The **code I wrote** is like the stylists and the salon layout.
+- The **`node_modules` folder** is the **toolbox**. It contains all the scissors, dyes, and mirrors (libraries) that we didn't make ourselves but need to do the job.
+- One of the tools in that toolbox is the **"Bridge"** (the Supabase client). This is what allows the salon (the app) to talk to the warehouse (the database/backend).
+
+**If you see "Mock Mode" or connection errors:**
+It usually means the "Bridge" is there, but it doesn't have the **address** (the keys in your `.env` file) to find the warehouse!
 
 ## Technical Stack
 - **Framework**: Next.js 16 (App Router)
