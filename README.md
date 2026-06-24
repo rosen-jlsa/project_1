@@ -6,6 +6,12 @@ A professional, high-performance booking management system built for high-end ha
 
 This application provides a seamless experience for clients to explore salon services, view transformations in a gallery, and book appointments with experts. It features a dual-mode data system (Supabase or Local JSON) for maximum reliability during development and production.
 
+### 📦 Understanding `node_modules` (The "Toolbox")
+Think of the `node_modules` folder as a **Toolbox**.
+- Your code is the **Stylist** (it knows *how* to cut hair).
+- The `node_modules` folder contains the **Tools** (scissors, combs, and the bridge to the database).
+- When you run `npm install`, you are filling your toolbox. Without it, the Stylist (your app) has no tools to connect to the backend or build the page!
+
 ### Key Features
 - **Dynamic Booking Wizard**: Intelligent slot selection within business hours (10:00 - 18:00).
 - **Interactive Gallery**: "Before & After" photo transformations.
