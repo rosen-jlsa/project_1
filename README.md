@@ -28,6 +28,15 @@ This application provides a seamless experience for clients to explore salon ser
    npm install
    ```
    *Note: This creates the `node_modules` folder, which acts as a "toolbox" containing all the external libraries the app needs to function and connect to the backend.*
+
+### 📦 Understanding node_modules (The Toolbox)
+
+Think of the `node_modules` folder as a **toolbox**.
+- Your code (the files in `app/`, `components/`, etc.) is like the **blueprint** for the salon.
+- The `node_modules` folder contains the **tools** (hammers, screwdrivers, etc.) needed to build and run that blueprint.
+- One of the most important tools in this box is the **"bridge"** (the Supabase library) that allows your app to talk to the database (the backend).
+- Without this folder, the app has no tools and no bridge to the backend!
+
 3. Configure environment variables (see `.env.example`).
 4. Launch development server:
    ```bash

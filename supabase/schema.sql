@@ -67,7 +67,6 @@ CREATE POLICY "Sysadmins manage roles" ON user_roles FOR ALL TO authenticated US
     SELECT 1
     FROM user_roles
     WHERE user_id = auth.uid()
-    WHERE user_id = auth.uid()
       AND role = 'sysadmin'
   )
 );
