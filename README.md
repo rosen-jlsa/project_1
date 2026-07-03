@@ -34,6 +34,24 @@ This application provides a seamless experience for clients to explore salon ser
    npm run dev
    ```
 
+## 📦 Understanding node_modules (The Toolbox)
+
+To help you understand the project structure, here is a simple explanation:
+
+### What is the `node_modules` folder?
+Think of your project like a **Hair Salon** that is being built:
+- **Your Code**: These are the blueprints and the stylists you hire.
+- **node_modules**: This is the **Toolbox**. It contains all the tools (scissors, combs, hair dryers) that you didn't make yourself but need to do the job.
+
+### Why is it a "Bridge" to the Backend?
+Inside the `node_modules` toolbox, there is a special tool called `supabase-js`.
+- Without this tool, your salon has no "phone line" to talk to the database (the backend).
+- The `node_modules` folder provides the **bridge** (the connection) that allows your code to send and receive information from Supabase.
+
+### How to fix the "Not Connected" problem:
+1. **Run `npm install`**: This fills your toolbox (`node_modules`) with the bridge tools.
+2. **Setup `.env`**: This gives the bridge the right "address" (URL and Key) to reach your specific backend.
+
 ## Launch Readiness
 
 To ensure the project is ready for production, follow the Launch Checklist:
