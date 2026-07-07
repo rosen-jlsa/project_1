@@ -28,7 +28,11 @@ This application provides a seamless experience for clients to explore salon ser
    npm install
    ```
    *Note: This creates the `node_modules` folder, which acts as a "toolbox" containing all the external libraries the app needs to function and connect to the backend.*
-3. Configure environment variables (see `.env.example`).
+3. Create your `.env` file from the template:
+   ```bash
+   cp .env.example .env
+   ```
+   *Note: You must fill in the `.env` file with your actual keys (like Supabase and Resend) for the backend to connect!*
 4. Launch development server:
    ```bash
    npm run dev
@@ -49,6 +53,14 @@ Ensure the latest stable version is on GitHub using the "Full Launch Fix" naming
 
 ### 3. Environment Variables
 Verify that `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are correctly set in your production environment.
+
+## 📦 Understanding node_modules (The Toolbox)
+
+Think of the `node_modules` folder as a **Stylist's Toolbox**.
+- To do their job, a stylist needs scissors, combs, and hair dye.
+- In this project, the app needs special "tools" to talk to the backend (like the **Supabase client**).
+- When you run `npm install`, you are filling that toolbox with all the tools needed.
+- If the toolbox is empty (or the `node_modules` folder is missing), the app doesn't have the "bridge" it needs to connect to the backend database!
 
 ## Technical Stack
 - **Framework**: Next.js 16 (App Router)
